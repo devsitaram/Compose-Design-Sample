@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.sitaram.composedesign.app.postOfficeApp
+import com.sitaram.composedesign.screen.HasDefaultViewOfSignScreen
 import com.sitaram.composedesign.ui.theme.ComposeDesignTheme
 import java.time.format.TextStyle
 
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            postOfficeApp()
+            HasDefaultViewOfSignScreen()
 //            ComposeDesignTheme {
                 // A surface container using the 'background' color from the theme
 //                Surface(

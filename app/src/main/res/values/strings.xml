@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Compose Design</string>
     <string name="hey">Hey There,</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="userEmail">Username</string>
+    <string name="userName">Username</string>
+    <string name="userPassword">Username</string>
 </resources>
