@@ -10,15 +10,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,14 +35,35 @@ import com.sitaram.composedesign.R
 import com.sitaram.composedesign.login.compponents.ButtonComponent
 import com.sitaram.composedesign.login.compponents.CheckboxComponent
 import com.sitaram.composedesign.login.compponents.HeadingTextComponent
-import com.sitaram.composedesign.login.compponents.InputTextFields
+import com.sitaram.composedesign.login.compponents.InputTextField
 import com.sitaram.composedesign.login.compponents.NormalTextComponent
-import com.sitaram.composedesign.login.compponents.PasswordTextFields
+import com.sitaram.composedesign.login.compponents.PasswordTextField
 
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
 fun SignUpScreen() {
+
+    var userEmail by remember {
+        mutableStateOf("")
+    }
+
+    var userName by remember {
+        mutableStateOf("")
+    }
+
+    var userPassword by remember {
+        mutableStateOf("")
+    }
+
+    // if the input fields are not empty then the button is visible
+    val isDateValidated by remember {
+        derivedStateOf {
+            !userEmail.isEmpty() && !userName.isEmpty() && !userPassword.isEmpty()
+        }
+    }
+
+
     // sign screen page
     Surface(
         modifier = Modifier
@@ -46,38 +74,59 @@ fun SignUpScreen() {
     ) {
         // child layout file
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 15.dp),
             horizontalAlignment = Alignment.CenterHorizontally // gravity center
         ) {
-            NormalTextComponent(value = stringResource(id = R.string.hey)) // text
+            NormalTextComponent(
+                value = stringResource(id = R.string.hey),
+                color = colorResource(id = R.color.softBlack)
+            ) // text
 
-            HeadingTextComponent(value = stringResource(id = R.string.create_an_account))
+            HeadingTextComponent(
+                value = stringResource(
+                    id = R.string.create_an_account
+                ),
+                color = colorResource(id = R.color.black)
+            )
+
             Spacer(modifier = Modifier.height(20.dp)) // marginTop/space
-
             // email
-            InputTextFields(
-                labelValue = stringResource(id = R.string.userEmail),
-                painterResource(id = R.drawable.ic_email)
+            InputTextField(
+                userEmail,
+                painterResource(id = R.drawable.ic_email),
+                onValueChange = { userEmail = it },
+                label = stringResource(id = R.string.userEmail),
             )
 
             // username
-            InputTextFields(
-                labelValue = stringResource(id = R.string.userName),
-                painterResource = painterResource(id = R.drawable.ic_profile)
+            InputTextField(
+                userName,
+                painterResource = painterResource(id = R.drawable.ic_profile),
+                onValueChange = { userName = it },
+                label = stringResource(id = R.string.userName),
             )
 
             // password
-            PasswordTextFields(
-                labelValue = stringResource(id = R.string.userPassword),
-                painterResource = painterResource(id = R.drawable.ic_password)
+            PasswordTextField(
+                userPassword,
+                painterResource = painterResource(id = R.drawable.ic_password),
+                onValueChange = { userPassword = it },
+                label = stringResource(id = R.string.userPassword)
             )
 
             // checkbox
             CheckboxComponent()
 
             Spacer(modifier = Modifier.height(30.dp))
+
+            // the fields is not empty then button are visible
             // button
-            ButtonComponent(value = stringResource(id = R.string.login))
+            ButtonComponent(
+                value = stringResource(id = R.string.signup),
+                isEnabled = isDateValidated
+            )
 
             Spacer(modifier = Modifier.height(70.dp))
             Divider(modifier = Modifier.fillMaxWidth()) // usign the divider
@@ -86,8 +135,14 @@ fun SignUpScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                NormalTextComponent(value = stringResource(id = R.string.register_your))
-                NormalTextComponent(value = stringResource(id = R.string.account))
+                NormalTextComponent(
+                    value = stringResource(id = R.string.login_your),
+                    color = colorResource(id = R.color.softBlack)
+                )
+                NormalTextComponent(
+                    value = stringResource(id = R.string.account),
+                    color = colorResource(id = R.color.purple_700)
+                )
             }
         }
     }
