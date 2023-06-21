@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -45,22 +46,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.home.HomeActivity
 import com.sitaram.composedesign.ui.theme.Purple
 
+// normal text
 @Composable
 fun NormalTextComponent(value: String) {
     Text(
         text = value,
         modifier = Modifier
-            .fillMaxWidth()
             .wrapContentHeight()
-            .heightIn(min = 40.dp)
-            .padding(top = 5.dp),
-
+//            .heightIn(5.dp) // height
+            .padding(top = 10.dp),
         style = TextStyle(
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
@@ -71,6 +72,7 @@ fun NormalTextComponent(value: String) {
     )
 }
 
+// heading text
 @Composable
 fun HeadingTextComponent(value: String) {
     Text(
@@ -79,7 +81,6 @@ fun HeadingTextComponent(value: String) {
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(top = 5.dp),
-
         style = TextStyle(
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
@@ -90,6 +91,7 @@ fun HeadingTextComponent(value: String) {
     )
 }
 
+// input text fields
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputTextFields(labelValue: String, painterResource: Painter) {
@@ -116,12 +118,12 @@ fun InputTextFields(labelValue: String, painterResource: Painter) {
     )
 }
 
+// password input text
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextFields(labelValue: String, painterResource: Painter) {
     // Initialize the variable for entered text
     val password = remember { mutableStateOf("") }
-
     val passwordVisible = remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier
@@ -131,7 +133,7 @@ fun PasswordTextFields(labelValue: String, painterResource: Painter) {
         value = password.value,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Purple,
-            focusedLabelColor = Purple,
+//            focusedLabelColor = Purple,
             cursorColor = Purple
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -160,6 +162,7 @@ fun PasswordTextFields(labelValue: String, painterResource: Painter) {
     )
 }
 
+// check box
 @Composable
 fun CheckboxComponent() {
     var checkedState by remember { mutableStateOf(false) }
@@ -182,45 +185,17 @@ fun CheckboxComponent() {
     }
 }
 
-
-@Composable
-fun ButtonComponent() {
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        // Handle the result if needed
-    }
-
-    Button(
-        modifier = Modifier.padding(16.dp),
-        onClick = {
-            val intent = Intent(/* Specify the target activity class */)
-            launcher.launch(intent)
-        }
-    ) {
-        Text(text = "Go to Another Activity")
-    }
-}
+// button
 @Composable
 fun ButtonComponent(value: String) {
     val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        /* Handle the result if needed */
-        if (result.resultCode == Activity.RESULT_OK) {
-            // Handle the result here
-            val data: Intent? = result.data
-            // Process the data or perform any necessary actions
-        }
-    }
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
         onClick = {
             val intent = Intent(context, HomeActivity::class.java)
-            launcher.launch(intent)
+            context.startActivity(intent)
         },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent)

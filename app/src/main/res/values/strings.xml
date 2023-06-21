@@ -10,5 +10,6 @@
     <string name="show_password">Show password</string>
     <string name="checkbox">Remember Me</string>
     <string name="login">Login</string>
-    <string name="register_your_account">Register Your Account</string>
+    <string name="register_your">Register Your</string>
+    <string name="account">Account</string>
 </resources>
