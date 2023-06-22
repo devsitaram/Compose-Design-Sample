@@ -2,6 +2,7 @@
     <string name="app_name">Compose Design</string>
     <string name="hey">Hey there,</string>
     <string name="create_an_account">Create an Account</string>
+    <string name="login_your_details">Login your details</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="userEmail">Email</string>
     <string name="userName">Username</string>
@@ -14,4 +15,6 @@
     <string name="register_your">Register Your</string>
     <string name="login_your">Login Your</string>
     <string name="account">Account?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

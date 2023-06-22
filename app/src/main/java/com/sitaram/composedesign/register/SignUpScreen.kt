@@ -1,17 +1,17 @@
-package com.sitaram.composedesign.login.screen
+package com.sitaram.composedesign.register
 
+import android.content.Intent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,34 +24,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.login.compponents.ButtonComponent
-import com.sitaram.composedesign.login.compponents.CheckboxComponent
-import com.sitaram.composedesign.login.compponents.HeadingTextComponent
-import com.sitaram.composedesign.login.compponents.InputTextField
-import com.sitaram.composedesign.login.compponents.NormalTextComponent
-import com.sitaram.composedesign.login.compponents.PasswordTextField
+import com.sitaram.composedesign.component_util.ButtonComponent
+import com.sitaram.composedesign.component_util.HeadingTextComponent
+import com.sitaram.composedesign.component_util.InputTextField
+import com.sitaram.composedesign.component_util.NormalTextComponent
+import com.sitaram.composedesign.component_util.PasswordTextField
+import com.sitaram.composedesign.home.HomeActivity
+import com.sitaram.composedesign.login.LoginActivity
 
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
 fun SignUpScreen() {
-
     var userEmail by remember {
         mutableStateOf("")
     }
-
     var userName by remember {
         mutableStateOf("")
     }
-
     var userPassword by remember {
         mutableStateOf("")
     }
@@ -63,7 +62,6 @@ fun SignUpScreen() {
         }
     }
 
-
     // sign screen page
     Surface(
         modifier = Modifier
@@ -73,7 +71,7 @@ fun SignUpScreen() {
 //            .align(Alignment.Center) // gravity center
     ) {
         // child layout file
-        Column(
+        Column (
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 15.dp),
@@ -98,6 +96,7 @@ fun SignUpScreen() {
                 painterResource(id = R.drawable.ic_email),
                 onValueChange = { userEmail = it },
                 label = stringResource(id = R.string.userEmail),
+                "The email is empty!"
             )
 
             // username
@@ -106,6 +105,7 @@ fun SignUpScreen() {
                 painterResource = painterResource(id = R.drawable.ic_profile),
                 onValueChange = { userName = it },
                 label = stringResource(id = R.string.userName),
+                "The username is empty!"
             )
 
             // password
@@ -116,14 +116,11 @@ fun SignUpScreen() {
                 label = stringResource(id = R.string.userPassword)
             )
 
-            // checkbox
-            CheckboxComponent()
-
             Spacer(modifier = Modifier.height(30.dp))
 
             // the fields is not empty then button are visible
             // button
-            ButtonComponent(
+            RegisterButton(
                 value = stringResource(id = R.string.signup),
                 isEnabled = isDateValidated
             )
@@ -145,6 +142,28 @@ fun SignUpScreen() {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun RegisterButton(value: String, isEnabled: Boolean = false) {
+    val context = LocalContext.current
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        contentPadding = PaddingValues(15.dp),
+        onClick = {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        },
+        enabled = isEnabled
+    ) {
+        Text(
+            text = value,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 

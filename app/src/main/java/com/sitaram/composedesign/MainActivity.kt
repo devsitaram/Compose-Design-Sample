@@ -1,15 +1,19 @@
 package com.sitaram.composedesign
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.sitaram.composedesign.login.screen.ViewOfSignUPScreen
+import com.sitaram.composedesign.login.LoginActivity
+import com.sitaram.composedesign.register.ViewOfSignUPScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            ViewOfSignUPScreen()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+//        setContent {
+//            ViewOfSignUPScreen()
 //            ComposeDesignTheme {
                 // A surface container using the 'background' color from the theme
 //                Surface(
@@ -19,9 +23,11 @@ class MainActivity : ComponentActivity() {
 //                    Greeting("Android")
 //                }
 //            }
-        }
+//        }
     }
 }
+
+
 //
 //@Composable
 //fun Greeting(name: String, modifier: Modifier = Modifier) {

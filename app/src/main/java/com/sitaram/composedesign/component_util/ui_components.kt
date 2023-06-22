@@ -1,5 +1,7 @@
-package com.sitaram.composedesign.login.compponents
+package com.sitaram.composedesign.component_util
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -38,6 +41,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
+import com.sitaram.composedesign.home.HomeActivity
+import com.sitaram.composedesign.login.LoginActivity
 import com.sitaram.composedesign.ui.theme.Purple
 
 // normal text
@@ -49,6 +54,23 @@ fun NormalTextComponent(value: String, color: Color) {
             .wrapContentHeight()
 //            .heightIn(5.dp) // height
             .padding(horizontal = 5.dp),  // Specify the desired padding value
+        style = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        textAlign = TextAlign.Center,
+        color = color
+    )
+}
+
+// account
+@Composable
+fun Account(value: String, color: Color){
+    Text(
+        text = value,
+        modifier = Modifier.wrapContentHeight()
+            .padding(horizontal = 5.dp),
         style = TextStyle(
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
@@ -80,13 +102,20 @@ fun HeadingTextComponent(value: String, color: Color) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputTextField(value: String, painterResource: Painter, onValueChange: (String) -> Unit = {}, label: String) {
+fun InputTextField(
+    value: String,
+    painterResource: Painter,
+    onValueChange: (String) -> Unit = {},
+    label: String,
+    error: String
+) {
     Column {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
+                .height(70.dp)
                 .padding(top = 5.dp),
             label = {
                 Text(label)
@@ -103,7 +132,7 @@ fun InputTextField(value: String, painterResource: Painter, onValueChange: (Stri
         // if the fields is empty then show error message
         if (value.isEmpty()) {
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "The password is empty!", color = Color.Red)
+            Text(text = error, color = Color.Red)
         }
     }
 }
@@ -186,14 +215,17 @@ fun CheckboxComponent() {
 }
 
 @Composable
-fun ButtonComponent(value: String, onButtonChecked: () -> Unit = {}, isEnabled: Boolean = false) {
+fun ButtonComponent(value: String, isEnabled: Boolean = false) {
+    val context = LocalContext.current
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .padding(5.dp),
-        contentPadding = PaddingValues(),
-        onClick = onButtonChecked,
+            .padding(10.dp),
+        contentPadding = PaddingValues(15.dp),
+        onClick = {
+            val intent = Intent(context, HomeActivity::class.java)
+            context.startActivity(intent)
+        },
         enabled = isEnabled
     ) {
         Text(
@@ -203,7 +235,6 @@ fun ButtonComponent(value: String, onButtonChecked: () -> Unit = {}, isEnabled: 
         )
     }
 }
-
 
 
 // input text fields
