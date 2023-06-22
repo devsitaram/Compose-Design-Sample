@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
-//        setContent {
+        setContent {
 //            ViewOfSignUPScreen()
 //            ComposeDesignTheme {
                 // A surface container using the 'background' color from the theme
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 //                    Greeting("Android")
 //                }
 //            }
-//        }
+        }
     }
 }
 

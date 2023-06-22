@@ -128,7 +128,7 @@ fun LoginScreen() {
                     }
                 },
             )
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             Divider(modifier = Modifier.fillMaxWidth()) // sign the divider
             // register text
             Row(
@@ -173,6 +173,6 @@ fun LoginButton(value: String, onClickAction: () -> Unit) {
 
 @Preview
 @Composable
-fun ViewOfSignUPScreen() {
+fun ViewOfLoginScreen() {
     LoginScreen()
 }
