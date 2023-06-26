@@ -7,8 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -52,15 +48,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.recyclerview.widget.RecyclerView
 import com.sitaram.composedesign.R
+import com.sitaram.composedesign.home.pojo.PlantPojo
 import com.sitaram.composedesign.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen(platList: List<Plant>) {
+fun MainScreens(platList: List<PlantPojo>) {
     Surface(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background).padding(15.dp)) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Column {
@@ -115,8 +111,8 @@ fun ViewOfHomePage() {
         }
     }
 
-    val platList = mutableListOf<Plant>()
-    platList.add(Plant("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
+    val platList = mutableListOf<PlantPojo>()
+    platList.add(PlantPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize().padding(15.dp).verticalScroll(rememberScrollState())
@@ -131,13 +127,14 @@ fun ViewOfHomePage() {
                     onValueChange = { inputNum = it },
                     text = "Enter a number"
                 )
-                ButtonWithBorder(
+                com.sitaram.composedesign.home.ButtonWithBorder(
                     onClickAction = {
                         if (isNumberValid) {
                             number = inputNum.toInt()
                         } else {
                             CoroutineScope(Dispatchers.Main).launch {
-                                Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG)
+                                    .show()
                             }
                         }
                     }
@@ -145,10 +142,10 @@ fun ViewOfHomePage() {
             }
             var i = 1
             if (number == 0) {
-                RecyclerView("Hello",0)
+                RecyclerView("Hello", 0)
             }
             while (i <= number) {
-                RecyclerView("Hello",i)
+                RecyclerView("Hello", i)
                 i++
             }
         }
