@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sitaram.composedesign.MainActivity
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.component_util.Account
 import com.sitaram.composedesign.component_util.CheckboxComponent
@@ -40,8 +41,6 @@ import com.sitaram.composedesign.component_util.HeadingTextComponent
 import com.sitaram.composedesign.component_util.InputTextField
 import com.sitaram.composedesign.component_util.NormalTextComponent
 import com.sitaram.composedesign.component_util.PasswordTextField
-import com.sitaram.composedesign.home.HomeActivity
-import com.sitaram.composedesign.register.RegisterActivity
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
@@ -121,7 +120,7 @@ fun LoginScreen() {
                 value = stringResource(id = R.string.login),
                 onClickAction = {
                     if (isDateValidated) {
-                        val intent = Intent(context, HomeActivity::class.java)
+                        val intent = Intent(context, MainActivity::class.java)
                         context.startActivity(intent)
                     } else {
                         Toast.makeText(context,"Invalid username!", Toast.LENGTH_LONG).show()

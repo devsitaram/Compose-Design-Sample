@@ -22,7 +22,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false" />
         <activity
-            android:name=".home.HomeActivity"
+            android:name="values.home.HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity

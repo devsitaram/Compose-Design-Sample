@@ -33,12 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.component_util.ButtonComponent
 import com.sitaram.composedesign.component_util.HeadingTextComponent
 import com.sitaram.composedesign.component_util.InputTextField
 import com.sitaram.composedesign.component_util.NormalTextComponent
 import com.sitaram.composedesign.component_util.PasswordTextField
-import com.sitaram.composedesign.home.HomeActivity
 import com.sitaram.composedesign.login.LoginActivity
 
 

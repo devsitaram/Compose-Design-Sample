@@ -1,34 +1,30 @@
 package com.sitaram.composedesign
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.sitaram.composedesign.login.LoginActivity
-import com.sitaram.composedesign.register.ViewOfSignUPScreen
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import com.sitaram.composedesign.main.Plant
+import com.sitaram.composedesign.main.ViewOfHomePage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+        val plants = mutableListOf<Plant>()
+        plants.add(Plant("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
+        plants.add(Plant("Rose", R.string.rose, R.mipmap.img_leave))
+        plants.add(Plant("Calendula", R.string.calendula, R.mipmap.img_leave))
         setContent {
-//            ViewOfSignUPScreen()
-//            ComposeDesignTheme {
-                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    Greeting("Android")
-//                }
-//            }
+            Surface(color = MaterialTheme.colorScheme.background) {
+                ViewOfHomePage(plants)
+            }
         }
     }
 }
 
 
-//
+
 //@Composable
 //fun Greeting(name: String, modifier: Modifier = Modifier) {
 //    Text(

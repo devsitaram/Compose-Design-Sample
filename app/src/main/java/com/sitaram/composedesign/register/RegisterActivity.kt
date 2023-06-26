@@ -12,7 +12,6 @@ class RegisterActivity : AppCompatActivity() {
 
         setContent {
             ViewOfSignUPScreen()
-
         }
     }
 }

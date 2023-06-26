@@ -41,8 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.home.HomeActivity
-import com.sitaram.composedesign.login.LoginActivity
 import com.sitaram.composedesign.ui.theme.Purple
 
 // normal text
@@ -214,27 +212,27 @@ fun CheckboxComponent() {
     }
 }
 
-@Composable
-fun ButtonComponent(value: String, isEnabled: Boolean = false) {
-    val context = LocalContext.current
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        contentPadding = PaddingValues(15.dp),
-        onClick = {
-            val intent = Intent(context, HomeActivity::class.java)
-            context.startActivity(intent)
-        },
-        enabled = isEnabled
-    ) {
-        Text(
-            text = value,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
+//@Composable
+//fun ButtonComponent(value: String, isEnabled: Boolean = false) {
+//    val context = LocalContext.current
+//    Button(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(10.dp),
+//        contentPadding = PaddingValues(15.dp),
+//        onClick = {
+//            val intent = Intent(context, HomeActivity::class.java)
+//            context.startActivity(intent)
+//        },
+//        enabled = isEnabled
+//    ) {
+//        Text(
+//            text = value,
+//            fontSize = 20.sp,
+//            fontWeight = FontWeight.Bold
+//        )
+//    }
+//}
 
 
 // input text fields
