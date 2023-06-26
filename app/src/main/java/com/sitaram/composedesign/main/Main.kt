@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +32,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -54,6 +52,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.recyclerview.widget.RecyclerView
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
@@ -61,36 +60,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun ViewOfHomePage(platList: List<Plant>) {
-    LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(platList) { data ->
-//            MyCard(data = data)
-        }
-    }
-}
-
-@Composable
-fun Home(platList: List<Plant>) {
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.background)
-        .padding(15.dp)) {
+fun MainScreen(platList: List<Plant>) {
+    Surface(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background).padding(15.dp)) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Column() {
+            Column {
                 // row where image and title
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.CenterHorizontally),
+                Row(modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .padding(5.dp),
+                    Image(modifier = Modifier
+                        .width(100.dp)
+                        .padding(5.dp),
                         painter = painterResource(id = R.mipmap.img_leave),
                         contentDescription = null
                     )
@@ -98,40 +80,33 @@ fun Home(platList: List<Plant>) {
                 }
                 Text(text = "Cosmetics", fontSize = 35.sp)
             }
-
-            platList.forEach(plants in platList){
-                println("namdc")
-            }
-            // recycler view
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 25.dp)
-                    .shadow(5.dp)
-                    .background(color = colorResource(id = R.color.softWhite)),
-                   verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .padding(5.dp),
-                    painter = painterResource(id = R.mipmap.img_leave),
-                    contentDescription = null
-                )
-                Column() {
-                    Text(text = "Aloe Vera", fontSize = 30.sp)
-                    Text(text = stringResource(id = R.string.aloe_vera))
+            // for loop
+            for (plant in platList) {
+                Row(modifier = Modifier.fillMaxSize().padding(top = 15.dp).shadow(5.dp).background(color = colorResource(id = R.color.softWhite)),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(modifier = Modifier.height(100.dp).width(100.dp).padding(start = 5.dp),
+                        painter = painterResource(id = plant.image),
+                        contentDescription = null
+                    )
+                    Column(modifier = Modifier.padding(10.dp)) {
+                        Text(text = plant.name, fontSize = 30.sp)
+                        Text(text = stringResource(id = plant.description))
+                    }
                 }
             }
         }
     }
 }
 
+
 // recycler
+@Preview
 @Composable
-fun Recycler() {
-    var number by remember { mutableStateOf(0) }
+fun ViewOfHomePage() {
     val context = LocalContext.current
+
+    var number by remember { mutableStateOf(0) }
     var inputNum by remember { mutableStateOf("") }
 
     val isNumberValid by remember(inputNum) {
@@ -139,17 +114,14 @@ fun Recycler() {
             inputNum.isNotEmpty()
         }
     }
+
+    val platList = mutableListOf<Plant>()
+    platList.add(Plant("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
+
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(15.dp)
-                .verticalScroll(rememberScrollState())
+        Column(modifier = Modifier.fillMaxSize().padding(15.dp).verticalScroll(rememberScrollState())
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 10.dp),
+            Row(modifier = Modifier.fillMaxSize().padding(bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -165,8 +137,7 @@ fun Recycler() {
                             number = inputNum.toInt()
                         } else {
                             CoroutineScope(Dispatchers.Main).launch {
-                                Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG)
-                                    .show()
+                                Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG).show()
                             }
                         }
                     }
@@ -174,22 +145,23 @@ fun Recycler() {
             }
             var i = 1
             if (number == 0) {
-                Greeting("Hello", number)
+                RecyclerView("Hello",0)
             }
             while (i <= number) {
-                Greeting("Hello", i)
+                RecyclerView("Hello",i)
                 i++
             }
         }
     }
 }
 
+
 @Composable
-fun Greeting(name: String, i: Int) {
+fun RecyclerView(name: String, i: Int) {
     var expanded by remember { mutableStateOf(false) }
 
     val extraPadding by animateDpAsState(
-        if (expanded) 5.dp else 0.dp
+        if (expanded) 25.dp else 0.dp
     )
     Surface(
         color = MaterialTheme.colorScheme.primary,
