@@ -1,4 +1,4 @@
-package com.sitaram.composedesign.home
+package com.sitaram.composedesign.features.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

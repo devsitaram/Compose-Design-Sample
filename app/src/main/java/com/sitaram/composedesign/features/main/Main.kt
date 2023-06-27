@@ -1,4 +1,4 @@
-package com.sitaram.composedesign.main
+package com.sitaram.composedesign.features.main
 
 import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
@@ -49,7 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.home.pojo.PlantPojo
+import com.sitaram.composedesign.features.home.pojo.PlantPojo
 import com.sitaram.composedesign.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -127,7 +127,7 @@ fun ViewOfHomePage() {
                     onValueChange = { inputNum = it },
                     text = "Enter a number"
                 )
-                com.sitaram.composedesign.home.ButtonWithBorder(
+                ButtonWithBorder(
                     onClickAction = {
                         if (isNumberValid) {
                             number = inputNum.toInt()

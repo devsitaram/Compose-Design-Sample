@@ -1,16 +1,16 @@
-package com.sitaram.composedesign.login
+package com.sitaram.composedesign.features.register
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.sitaram.composedesign.R
 
-class LoginActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
         setContent {
-            ViewOfLoginScreen()
+            ViewOfSignUPScreen()
         }
     }
 }

@@ -1,6 +1,7 @@
-package com.sitaram.composedesign.register
+package com.sitaram.composedesign.features.login
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,22 +34,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.component_util.HeadingTextComponent
-import com.sitaram.composedesign.component_util.InputTextField
-import com.sitaram.composedesign.component_util.NormalTextComponent
-import com.sitaram.composedesign.component_util.PasswordTextField
-import com.sitaram.composedesign.login.LoginActivity
+import com.sitaram.composedesign.features.component_util.Account
+import com.sitaram.composedesign.features.component_util.CheckboxComponent
+import com.sitaram.composedesign.features.component_util.HeadingTextComponent
+import com.sitaram.composedesign.features.component_util.InputTextField
+import com.sitaram.composedesign.features.component_util.NormalTextComponent
+import com.sitaram.composedesign.features.component_util.PasswordTextField
+import com.sitaram.composedesign.features.home.HomeActivity
 
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
-fun SignUpScreen() {
-    var userEmail by remember {
-        mutableStateOf("")
-    }
+fun LoginScreen() {
+    val context = LocalContext.current
     var userName by remember {
         mutableStateOf("")
     }
+
     var userPassword by remember {
         mutableStateOf("")
     }
@@ -56,20 +58,23 @@ fun SignUpScreen() {
     // if the input fields are not empty then the button is visible
     val isDateValidated by remember {
         derivedStateOf {
-            !userEmail.isEmpty() && !userName.isEmpty() && !userPassword.isEmpty()
+            if (userName.isEmpty() && userPassword.isEmpty()) {
+                Toast.makeText(context, "The fields is empty", Toast.LENGTH_LONG).show()
+                return@derivedStateOf false
+            } else {
+                return@derivedStateOf true
+            }
         }
     }
-
     // sign screen page
     Surface(
         modifier = Modifier
             .fillMaxSize() // size
             .background(Color.White) // background
-            .padding(20.dp) // padding
-//            .align(Alignment.Center) // gravity center
+            .padding(30.dp) // padding
     ) {
         // child layout file
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 15.dp),
@@ -81,21 +86,11 @@ fun SignUpScreen() {
             ) // text
 
             HeadingTextComponent(
-                value = stringResource(
-                    id = R.string.create_an_account
-                ),
+                value = stringResource(id = R.string.login_your_details),
                 color = colorResource(id = R.color.black)
             )
 
-            Spacer(modifier = Modifier.height(20.dp)) // marginTop/space
-            // email
-            InputTextField(
-                userEmail,
-                painterResource(id = R.drawable.ic_email),
-                onValueChange = { userEmail = it },
-                label = stringResource(id = R.string.userEmail),
-                "The email is empty!"
-            )
+            Spacer(modifier = Modifier.height(50.dp)) // marginTop/space
 
             // username
             InputTextField(
@@ -114,27 +109,36 @@ fun SignUpScreen() {
                 label = stringResource(id = R.string.userPassword)
             )
 
+            // checkbox
+            CheckboxComponent()
+
             Spacer(modifier = Modifier.height(30.dp))
 
             // the fields is not empty then button are visible
             // button
-            RegisterButton(
-                value = stringResource(id = R.string.signup),
-                isEnabled = isDateValidated
+            LoginButton(
+                value = stringResource(id = R.string.login),
+                onClickAction = {
+                    if (isDateValidated) {
+                        val intent = Intent(context, HomeActivity::class.java)
+                        context.startActivity(intent)
+                    } else {
+                        Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
+                    }
+                },
             )
-
-            Spacer(modifier = Modifier.height(70.dp))
-            Divider(modifier = Modifier.fillMaxWidth()) // usign the divider
+            Spacer(modifier = Modifier.height(50.dp))
+            Divider(modifier = Modifier.fillMaxWidth()) // sign the divider
             // register text
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 NormalTextComponent(
-                    value = stringResource(id = R.string.login_your),
+                    value = stringResource(id = R.string.register_your),
                     color = colorResource(id = R.color.softBlack)
                 )
-                NormalTextComponent(
+                Account(
                     value = stringResource(id = R.string.account),
                     color = colorResource(id = R.color.purple_700)
                 )
@@ -143,19 +147,20 @@ fun SignUpScreen() {
     }
 }
 
+// check the username validation
+fun nameValidation(username: String): Boolean {
+    val nameRegex = Regex("[a-zA-Z]\\d[a-zA-Z]")
+    return username.matches(nameRegex)
+}
+
 @Composable
-fun RegisterButton(value: String, isEnabled: Boolean = false) {
-    val context = LocalContext.current
+fun LoginButton(value: String, onClickAction: () -> Unit) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
         contentPadding = PaddingValues(15.dp),
-        onClick = {
-            val intent = Intent(context, LoginActivity::class.java)
-            context.startActivity(intent)
-        },
-        enabled = isEnabled
+        onClick = onClickAction,
     ) {
         Text(
             text = value,
@@ -167,6 +172,6 @@ fun RegisterButton(value: String, isEnabled: Boolean = false) {
 
 @Preview
 @Composable
-fun ViewOfSignUPScreen() {
-    SignUpScreen()
+fun ViewOfLoginScreen() {
+    LoginScreen()
 }

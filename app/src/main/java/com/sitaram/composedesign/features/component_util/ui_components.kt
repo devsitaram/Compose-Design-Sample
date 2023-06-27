@@ -1,4 +1,4 @@
-package com.sitaram.composedesign.component_util
+package com.sitaram.composedesign.features.component_util
 
 import android.app.Activity
 import android.content.Intent
