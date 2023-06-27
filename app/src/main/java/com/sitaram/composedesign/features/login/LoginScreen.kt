@@ -1,6 +1,8 @@
 package com.sitaram.composedesign.features.login
 
+import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
@@ -29,24 +33,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.component_util.Account
 import com.sitaram.composedesign.features.component_util.CheckboxComponent
 import com.sitaram.composedesign.features.component_util.HeadingTextComponent
 import com.sitaram.composedesign.features.component_util.InputTextField
 import com.sitaram.composedesign.features.component_util.NormalTextComponent
 import com.sitaram.composedesign.features.component_util.PasswordTextField
+import com.sitaram.composedesign.features.database.DatabaseHelper
 import com.sitaram.composedesign.features.home.HomeActivity
-
+import com.sitaram.composedesign.features.register.RegisterActivity
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
-fun LoginScreen() {
+fun ViewOfLoginScreen(databaseHelper: DatabaseHelper?) {
+
     val context = LocalContext.current
+
     var userName by remember {
         mutableStateOf("")
     }
@@ -120,8 +128,7 @@ fun LoginScreen() {
                 value = stringResource(id = R.string.login),
                 onClickAction = {
                     if (isDateValidated) {
-                        val intent = Intent(context, HomeActivity::class.java)
-                        context.startActivity(intent)
+                        loginDetails(userName, userPassword, context, databaseHelper)
                     } else {
                         Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
                     }
@@ -138,13 +145,29 @@ fun LoginScreen() {
                     value = stringResource(id = R.string.register_your),
                     color = colorResource(id = R.color.softBlack)
                 )
-                Account(
+                RegisterTextComponent(
                     value = stringResource(id = R.string.account),
-                    color = colorResource(id = R.color.purple_700)
+                    context = context
                 )
             }
         }
     }
+}
+
+fun loginDetails(userName: String, userPassword: String, context: Context, databaseHelper: DatabaseHelper?) {
+    val isSuccess = databaseHelper?.userDao()?.getLoginUser(userName,userPassword)
+    Log.e(" database Success","$isSuccess")
+    if (isSuccess == true) {
+        navigateToHome(context)
+    } else {
+        Toast.makeText(context, "Enter the valid details!", Toast.LENGTH_SHORT).show()
+    }
+}
+
+// navigation
+fun navigateToHome(context: Context) {
+    val intent = Intent(context, HomeActivity::class.java)
+    context.startActivity(intent)
 }
 
 // check the username validation
@@ -170,8 +193,22 @@ fun LoginButton(value: String, onClickAction: () -> Unit) {
     }
 }
 
-@Preview
+
+// account
 @Composable
-fun ViewOfLoginScreen() {
-    LoginScreen()
+fun RegisterTextComponent(value: String, context: Context) {
+    ClickableText(
+        text = AnnotatedString(value),
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(horizontal = 5.dp),
+        style = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        onClick = {
+            val intent = Intent(context, RegisterActivity::class.java)
+            context.startActivity(intent)
+        })
 }

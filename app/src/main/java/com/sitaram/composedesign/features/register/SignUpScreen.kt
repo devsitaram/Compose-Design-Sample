@@ -1,6 +1,9 @@
 package com.sitaram.composedesign.features.register
 
+import android.content.Context
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,13 +39,26 @@ import com.sitaram.composedesign.R
 import com.sitaram.composedesign.features.component_util.HeadingTextComponent
 import com.sitaram.composedesign.features.component_util.InputTextField
 import com.sitaram.composedesign.features.component_util.NormalTextComponent
+import com.sitaram.composedesign.features.component_util.OnclickTextComponent
 import com.sitaram.composedesign.features.component_util.PasswordTextField
-import com.sitaram.composedesign.features.login.LoginActivity
+import com.sitaram.composedesign.features.database.DatabaseHelper
+import com.sitaram.composedesign.features.database.UserPojo
+import com.sitaram.composedesign.features.home.HomeActivity
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.CompletableObserver
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.Objects
 
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
-fun SignUpScreen() {
+fun ViewOfSignUPScreen(databaseHelper: DatabaseHelper?) {
+
+    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    val context = LocalContext.current
+
     var userEmail by remember {
         mutableStateOf("")
     }
@@ -54,7 +70,7 @@ fun SignUpScreen() {
     }
 
     // if the input fields are not empty then the button is visible
-    val isDateValidated by remember {
+    val isNotEmpty by remember {
         derivedStateOf {
             !userEmail.isEmpty() && !userName.isEmpty() && !userPassword.isEmpty()
         }
@@ -65,14 +81,14 @@ fun SignUpScreen() {
         modifier = Modifier
             .fillMaxSize() // size
             .background(Color.White) // background
-            .padding(20.dp) // padding
+            .padding(30.dp) // padding
 //            .align(Alignment.Center) // gravity center
     ) {
         // child layout file
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 15.dp),
+                .padding(top = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally // gravity center
         ) {
             NormalTextComponent(
@@ -87,7 +103,7 @@ fun SignUpScreen() {
                 color = colorResource(id = R.color.black)
             )
 
-            Spacer(modifier = Modifier.height(20.dp)) // marginTop/space
+            Spacer(modifier = Modifier.height(40.dp)) // marginTop/space
             // email
             InputTextField(
                 userEmail,
@@ -116,11 +132,33 @@ fun SignUpScreen() {
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // the fields is not empty then button are visible
             // button
             RegisterButton(
                 value = stringResource(id = R.string.signup),
-                isEnabled = isDateValidated
+                isEnabled = isNotEmpty,
+                onClickAction = {
+                    if (isNotEmpty) {
+                        try {
+                            Objects.requireNonNull<Completable?>(registerDetails(userEmail, userName, userPassword, databaseHelper, context))
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(object : CompletableObserver {
+                                    override fun onSubscribe(disposable: Disposable) {
+                                        compositeDisposable.add(disposable)
+                                    }
+
+                                    override fun onComplete() {}
+
+                                    override fun onError(e: Throwable) {}
+                                })
+                            //  Log.e("Database", "$aa")
+                        } catch (exception: NullPointerException) {
+                            Toast.makeText(context, "Database does not acccept", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
+                    }
+                },
             )
 
             Spacer(modifier = Modifier.height(70.dp))
@@ -134,9 +172,9 @@ fun SignUpScreen() {
                     value = stringResource(id = R.string.login_your),
                     color = colorResource(id = R.color.softBlack)
                 )
-                NormalTextComponent(
+                OnclickTextComponent(
                     value = stringResource(id = R.string.account),
-                    color = colorResource(id = R.color.purple_700)
+                    context = context
                 )
             }
         }
@@ -144,18 +182,14 @@ fun SignUpScreen() {
 }
 
 @Composable
-fun RegisterButton(value: String, isEnabled: Boolean = false) {
-    val context = LocalContext.current
+fun RegisterButton(value: String, isEnabled: Boolean = false, onClickAction: () -> Unit) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
         contentPadding = PaddingValues(15.dp),
-        onClick = {
-            val intent = Intent(context, LoginActivity::class.java)
-            context.startActivity(intent)
-        },
-        enabled = isEnabled
+        enabled = isEnabled,
+        onClick = onClickAction,
     ) {
         Text(
             text = value,
@@ -165,8 +199,64 @@ fun RegisterButton(value: String, isEnabled: Boolean = false) {
     }
 }
 
+fun registerDetails(
+    userEmail: String,
+    userName: String,
+    userPassword: String,
+    databaseHelper: DatabaseHelper?,
+    context: Context
+): Completable? {
+    // initialize the variable
+    val isValidEmail = emailValidation(userEmail)
+    val isValidName = nameValidation(userName)
+//    val isValidPassword = passwordValidation(userPassword)
+
+    Log.e("User Email:", "$isValidEmail $userEmail")
+    Log.e("User Name:", "$isValidName $userName")
+//    Log.e("User Password:", "$isValidPassword $userPassword")
+
+    // create the user list
+    val userList = mutableListOf<UserPojo>()
+    userList.add(UserPojo(userEmail, userName, userPassword))
+    Log.e("User List:", "$userList")
+    if (isValidEmail && isValidName) {
+        // call the register button click method
+        return databaseHelper?.userDao()?.registerUser(userList)
+    } else {
+        Toast.makeText(context, "Enter the valid details!", Toast.LENGTH_SHORT).show()
+        return null
+    }
+}
+
+// check the username validation
+fun emailValidation(email: String): Boolean {
+    // get text fields text
+    val emailPattern = Regex("[a-zA-Z\\d._-]+@[a-z]+.+[a-z]+")
+    return email.matches(emailPattern)
+}
+
+// check the username validation
+fun nameValidation(username: String): Boolean {
+    val nameRegex = Regex("[A-Za-z\\s]+")
+//    val nameRegex = Regex("[A-Za-z]+|\\s[a-z]+")
+//    val nameRegex = Regex("[a-zA-Z]\\d[a-zA-Z]")
+    return username.matches(nameRegex)
+}
+
+// check the username validation
+fun passwordValidation(password: String): Boolean {
+    val nameRegex = Regex("[a-zA-Z0-9]")
+    return password.matches(nameRegex)
+}
+
+// navigation
+fun navigateToLoginPage(context: Context) {
+    val intent = Intent(context, HomeActivity::class.java)
+    context.startActivity(intent)
+}
+
 @Preview
 @Composable
 fun ViewOfSignUPScreen() {
-    SignUpScreen()
+//    SignUpScreen()
 }
