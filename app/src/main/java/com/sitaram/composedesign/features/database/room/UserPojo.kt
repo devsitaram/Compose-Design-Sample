@@ -1,4 +1,4 @@
-package com.sitaram.composedesign.features.database
+package com.sitaram.composedesign.features.database.room
 
 import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.room.ColumnInfo

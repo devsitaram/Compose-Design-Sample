@@ -42,14 +42,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sitaram.composedesign.features.home.pojo.PlantPojo
+import com.sitaram.composedesign.features.home.pojo.FlowerPojo
 import com.sitaram.composedesign.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun ViewOfHomePage(platList: List<PlantPojo>) {
+fun ViewOfHomePage(platList: List<FlowerPojo>) {
 
 }
 

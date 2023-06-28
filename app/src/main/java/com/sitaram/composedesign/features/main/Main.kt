@@ -49,14 +49,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.home.pojo.PlantPojo
+import com.sitaram.composedesign.features.home.pojo.FlowerPojo
 import com.sitaram.composedesign.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreens(platList: List<PlantPojo>) {
+fun MainScreens(platList: List<FlowerPojo>) {
     Surface(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background).padding(15.dp)) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Column {
@@ -111,8 +111,8 @@ fun ViewOfHomePage() {
         }
     }
 
-    val platList = mutableListOf<PlantPojo>()
-    platList.add(PlantPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
+    val platList = mutableListOf<FlowerPojo>()
+    platList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize().padding(15.dp).verticalScroll(rememberScrollState())

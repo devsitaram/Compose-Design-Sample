@@ -21,6 +21,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,13 +46,14 @@ import com.sitaram.composedesign.features.component_util.HeadingTextComponent
 import com.sitaram.composedesign.features.component_util.InputTextField
 import com.sitaram.composedesign.features.component_util.NormalTextComponent
 import com.sitaram.composedesign.features.component_util.PasswordTextField
-import com.sitaram.composedesign.features.database.DatabaseHelper
+import com.sitaram.composedesign.features.database.room.DatabaseHelper
+import com.sitaram.composedesign.features.database.sqlite.RoomDBHelper
 import com.sitaram.composedesign.features.home.HomeActivity
 import com.sitaram.composedesign.features.register.RegisterActivity
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
-fun ViewOfLoginScreen(databaseHelper: DatabaseHelper?) {
+fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
 
     val context = LocalContext.current
 
@@ -154,8 +156,8 @@ fun ViewOfLoginScreen(databaseHelper: DatabaseHelper?) {
     }
 }
 
-fun loginDetails(userName: String, userPassword: String, context: Context, databaseHelper: DatabaseHelper?) {
-    val isSuccess = databaseHelper?.userDao()?.getLoginUser(userName,userPassword)
+fun loginDetails(userName: String, userPassword: String, context: Context, databaseHelper: RoomDBHelper?) {
+    val isSuccess = databaseHelper?.getLoginUsers(userName,userPassword)
     Log.e(" database Success","$isSuccess")
     if (isSuccess == true) {
         navigateToHome(context)
@@ -192,7 +194,6 @@ fun LoginButton(value: String, onClickAction: () -> Unit) {
         )
     }
 }
-
 
 // account
 @Composable

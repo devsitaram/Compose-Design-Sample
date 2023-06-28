@@ -1,10 +1,11 @@
-package com.sitaram.composedesign.features.database
+package com.sitaram.composedesign.features.database.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.sitaram.composedesign.features.database.room.UserPojo
 import io.reactivex.rxjava3.core.Completable
 
 @SuppressWarnings("AndroidUnresolvedRoomSqlReference")
@@ -17,9 +18,12 @@ interface Dao {
     @Query("SELECT EXISTS(SELECT * FROM user WHERE user_name =:userName AND user_password =:userPassword)")
     fun getLoginUser(userName: String, userPassword: String): Boolean?
 
+    @Query("SELECT * FROM user WHERE user_name = :username")
+    fun getAllUsers(username: String)
+
     @Update
-    suspend fun updateUser(user: UserPojo)
+    fun updateUser(user: UserPojo)
 
     @Query("DELETE FROM user where userId = :id")
-    suspend fun deleteUserById(id: Int)
+    fun deleteUserById(id: Int)
 }

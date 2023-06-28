@@ -41,9 +41,12 @@ import com.sitaram.composedesign.features.component_util.InputTextField
 import com.sitaram.composedesign.features.component_util.NormalTextComponent
 import com.sitaram.composedesign.features.component_util.OnclickTextComponent
 import com.sitaram.composedesign.features.component_util.PasswordTextField
-import com.sitaram.composedesign.features.database.DatabaseHelper
-import com.sitaram.composedesign.features.database.UserPojo
+import com.sitaram.composedesign.features.database.room.DatabaseHelper
+import com.sitaram.composedesign.features.database.room.UserPojo
+import com.sitaram.composedesign.features.database.sqlite.RoomDBHelper
 import com.sitaram.composedesign.features.home.HomeActivity
+import com.sitaram.composedesign.features.login.LoginActivity
+import com.sitaram.composedesign.features.login.loginDetails
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.CompletableObserver
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -54,9 +57,8 @@ import java.util.Objects
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
-fun ViewOfSignUPScreen(databaseHelper: DatabaseHelper?) {
+fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
     val context = LocalContext.current
 
     var userEmail by remember {
@@ -138,23 +140,7 @@ fun ViewOfSignUPScreen(databaseHelper: DatabaseHelper?) {
                 isEnabled = isNotEmpty,
                 onClickAction = {
                     if (isNotEmpty) {
-                        try {
-                            Objects.requireNonNull<Completable?>(registerDetails(userEmail, userName, userPassword, databaseHelper, context))
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(object : CompletableObserver {
-                                    override fun onSubscribe(disposable: Disposable) {
-                                        compositeDisposable.add(disposable)
-                                    }
-
-                                    override fun onComplete() {}
-
-                                    override fun onError(e: Throwable) {}
-                                })
-                            //  Log.e("Database", "$aa")
-                        } catch (exception: NullPointerException) {
-                            Toast.makeText(context, "Database does not acccept", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                        registerDetails(userEmail, userName, userPassword, databaseHelper, context)
                     } else {
                         Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
                     }
@@ -199,32 +185,21 @@ fun RegisterButton(value: String, isEnabled: Boolean = false, onClickAction: () 
     }
 }
 
-fun registerDetails(
-    userEmail: String,
-    userName: String,
-    userPassword: String,
-    databaseHelper: DatabaseHelper?,
-    context: Context
-): Completable? {
+fun registerDetails(userEmail: String, userName: String, userPassword: String, databaseHelper: RoomDBHelper?, context: Context) {
     // initialize the variable
     val isValidEmail = emailValidation(userEmail)
     val isValidName = nameValidation(userName)
-//    val isValidPassword = passwordValidation(userPassword)
 
-    Log.e("User Email:", "$isValidEmail $userEmail")
-    Log.e("User Name:", "$isValidName $userName")
-//    Log.e("User Password:", "$isValidPassword $userPassword")
-
-    // create the user list
-    val userList = mutableListOf<UserPojo>()
-    userList.add(UserPojo(userEmail, userName, userPassword))
-    Log.e("User List:", "$userList")
     if (isValidEmail && isValidName) {
         // call the register button click method
-        return databaseHelper?.userDao()?.registerUser(userList)
+        val isRegisterSuccess= databaseHelper?.registerUser(userEmail, userName, userPassword)
+        if (isRegisterSuccess == true){
+            navigateToLoginPage(context = context)
+        } else {
+            Toast.makeText(context, "Please enter the valid data!", Toast.LENGTH_SHORT).show()
+        }
     } else {
         Toast.makeText(context, "Enter the valid details!", Toast.LENGTH_SHORT).show()
-        return null
     }
 }
 
@@ -238,8 +213,6 @@ fun emailValidation(email: String): Boolean {
 // check the username validation
 fun nameValidation(username: String): Boolean {
     val nameRegex = Regex("[A-Za-z\\s]+")
-//    val nameRegex = Regex("[A-Za-z]+|\\s[a-z]+")
-//    val nameRegex = Regex("[a-zA-Z]\\d[a-zA-Z]")
     return username.matches(nameRegex)
 }
 
@@ -251,8 +224,9 @@ fun passwordValidation(password: String): Boolean {
 
 // navigation
 fun navigateToLoginPage(context: Context) {
-    val intent = Intent(context, HomeActivity::class.java)
+    val intent = Intent(context, LoginActivity::class.java)
     context.startActivity(intent)
+    Toast.makeText(context, "Register Success.", Toast.LENGTH_SHORT).show()
 }
 
 @Preview

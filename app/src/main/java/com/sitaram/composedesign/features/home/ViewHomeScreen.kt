@@ -9,19 +9,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -46,199 +50,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.home.pojo.BottomNavItem
-import androidx.navigation.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sitaram.composedesign.features.home.pojo.PlantPojo
+import com.sitaram.composedesign.features.home.pojo.FlowerPojo
 import com.sitaram.composedesign.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//@Composable
-//fun NavigationGraph(navController: NavHostController) {
-//    NavHost(navController, startDestination = BottomNavItem.Home.screen_route) {
-//        composable(BottomNavItem.Home.screen_route) {
-//            HomeScreen()
-//        }
-//        composable(BottomNavItem.Profile.screen_route) {
-//            ProfileScreen()
-//        }
-//        composable(BottomNavItem.Contact.screen_route) {
-//            ContactScreen()
-//        }
-//        composable(BottomNavItem.Notification.screen_route) {
-//            NotificationScreen()
-//        }
-//        composable(BottomNavItem.Setting.screen_route) {
-//            SettingScreen()
-//        }
-//    }
-//}
-
-//@Composable
-//fun BottomNavigationBar(navController: NavHostController, backgroundColor: Color, contentColor: Color) {
-//    val items = listOf(
-//        BottomNavItem.Home,
-//        BottomNavItem.Profile,
-//        BottomNavItem.Contact,
-//        BottomNavItem.Notification,
-//        BottomNavItem.Setting
-//    )
-//    BottomNavigationBar(
-//        navController = navController,
-//        backgroundColor = backgroundColor,
-//        contentColor = contentColor,
-//    ) {
-//        val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
-//        val currentRoute = navBackStackEntry?.destination?.route
-//        items.forEach { item ->
-//            BottomNavigationItem(
-//                icon = { Icon(painterResource = painterResource(id = item.icon), contentDescription = item.title) },
-//                label = { Text(text = item.title, fontSize = 9.sp) },
-//                selectedContentColor = Color.Black,
-//                unselectedContentColor = Color.Black.copy(0.4f),
-//                alwaysShowLabel = true,
-//                selected = currentRoute == item.screen_route,
-//                onClick = {
-//                    navController.navigate(item.screen_route) {
-//                        navController.graph.startDestinationRoute?.let { screen_route ->
-//                            popUpTo(screen_route) {
-//                                saveState = true
-//                            }
-//                        }
-//                        launchSingleTop = true
-//                        restoreState = true
-//                    }
-//                }
-//            )
-//        }
-//    }
-//}
-
-//@ExperimentalMaterial3Api
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-//@Preview
-//@Composable
-//fun MainScreenView() {
-//    val navController = rememberNavController()
-//    Scaffold(
-//        bottomBar = {
-//            BottomNavigationBar(
-//                navController,
-//                backgroundColor = colorResource(id = R.color.teal_200),
-//                contentColor = Color.Black
-//            )
-//        }
-//    ) {
-//        NavigationGraph(navController = navController)
-//    }
-//}
-
+@Preview
 @Composable
-fun HomeScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Home Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
+fun ViewOfHomePage() {
 
-@Composable
-fun ProfileScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "My Profile Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun ContactScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Add Contact Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun NotificationScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Notification Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun SettingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Setting Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-
-
-// recycler
-@Composable
-fun ViewOfHomePage(platList: List<PlantPojo>) {
     val context = LocalContext.current
 
     var number by remember { mutableIntStateOf(0) }
@@ -249,76 +71,94 @@ fun ViewOfHomePage(platList: List<PlantPojo>) {
             inputNum.isNotEmpty()
         }
     }
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier
+
+    val flowerList = mutableListOf<FlowerPojo>()
+    flowerList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_aloevera))
+    flowerList.add(FlowerPojo("Rose", R.string.rose, R.mipmap.img_rose))
+    flowerList.add(FlowerPojo("Calendula", R.string.calendula, R.mipmap.img_calendula))
+    flowerList.add(FlowerPojo("Erigeron", R.string.erigeron, R.mipmap.img_erigeron))
+    flowerList.add(FlowerPojo("Rhododendron", R.string.rhododendron, R.mipmap.img_rhododerndorn))
+    flowerList.add(FlowerPojo("Bluebell", R.string.bluebell, R.mipmap.img_bluebell))
+
+    Column(
+        modifier = Modifier
             .fillMaxSize()
+            .background(color = Color.White)
             .padding(20.dp)
-            .verticalScroll(rememberScrollState())
+    ) {
+        Row(
+            modifier = Modifier.padding(bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Row(modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                // input text
-                InputEditTextField(
-                    inputNum,
-                    onValueChange = { inputNum = it },
-                    text = "Enter a number"
-                )
-                ButtonWithBorder(
-                    onClickAction = {
-                        if (isNumberValid) {
-                            try{
-                                number = inputNum.toInt()
-                                Toast.makeText(context, "$number times show", Toast.LENGTH_SHORT).show()
-                            } catch (_: NumberFormatException){
-                                Toast.makeText(context, "Enter the valid number!", Toast.LENGTH_LONG).show()
-                            }
-                        } else {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG).show()
-                            }
+            // input text
+            InputEditTextField(
+                inputNum,
+                onValueChange = { inputNum = it },
+                text = "Enter a number"
+            )
+            ButtonWithBorder(
+                onClickAction = {
+                    if (isNumberValid) {
+                        try {
+                            number = inputNum.toInt()
+                            Toast.makeText(context, "$number times show", Toast.LENGTH_SHORT)
+                                .show()
+                        } catch (_: NumberFormatException) {
+                            Toast.makeText(
+                                context,
+                                "Enter the valid number!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG).show()
                         }
                     }
-                )
-            }
-            var i = 1
-            if (number == 0) {
-                ShowRecyclerView(platList, 0)
-            }
-            while (i <= number) {
-                ShowRecyclerView(platList, i)
-                i++
+                }
+            )
+        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+        ) {
+            items(flowerList) { plant ->
+                PlantCard(plant.name, plant.description, plant.image)
             }
         }
     }
 }
 
+data class FlowerPojo(val name: String, val description: Int, val image: Int)
+
 @Composable
-fun ShowRecyclerView(platList: List<PlantPojo>, count: Int){
-    for (plant in platList) {
+fun PlantCard(name: String, description: Int, image: Int) {
+    Card(modifier = Modifier
+        .padding(top = 5.dp)
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .background(color = Color.White)
+        .shadow(2.dp),
+        shape = MaterialTheme.shapes.medium,
+    ) {
         Row(modifier = Modifier
             .fillMaxSize()
-            .padding(top = 15.dp)
-            .shadow(5.dp)
-            .background(color = colorResource(id = R.color.softWhite)),
-            verticalAlignment = Alignment.CenterVertically
+            .padding(2.dp)
+            .background(color = Color.White),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
+            Image(modifier = Modifier
+                .height(100.dp)
+                .width(100.dp)
+                .padding(start = 5.dp),
+                painter = painterResource(id = image),
+                contentDescription = null
+            )
             Column(modifier = Modifier.padding(10.dp)) {
-                Image(modifier = Modifier
-                    .height(100.dp)
-                    .width(100.dp)
-                    .padding(start = 5.dp),
-                    painter = painterResource(id = plant.image),
-                    contentDescription = null
-                )
-                Text(text = "$count")
-            }
-            Column(modifier = Modifier.padding(10.dp)) {
-                Text(text = plant.name, fontSize = 30.sp)
-                Text(text = stringResource(id = plant.description))
+                Text(text = name, fontSize = 20.sp)
+                Text(text = stringResource(id = description))
             }
         }
     }
@@ -344,7 +184,7 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
-                .width(250.dp)
+                .width(260.dp)
                 .height(70.dp)
                 .padding(top = 5.dp),
             label = { Text(text) },
@@ -398,6 +238,38 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //    }
 //}
 
+
+//LazyColumn(modifier = Modifier.fillMaxSize(),
+//        contentPadding = PaddingValues(15.dp),
+//    ){
+//        item {
+//            Row(modifier = Modifier
+//                .fillMaxSize()
+//                .padding(top = 15.dp)
+//                .shadow(5.dp)
+//                .background(color = colorResource(id = R.color.softWhite)),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Column(modifier = Modifier.padding(10.dp)) {
+//                    Image(modifier = Modifier
+//                        .height(100.dp)
+//                        .width(100.dp)
+//                        .padding(start = 5.dp),
+//                        painter = painterResource(id = plant.image),
+//                        contentDescription = null
+//                    )
+//                    Text(text = "$count")
+//                }
+//                Column(modifier = Modifier.padding(10.dp)) {
+//                    Text(text = plant.name, fontSize = 30.sp)
+//                    Text(text = stringResource(id = plant.description))
+//                }
+//            }
+//        }
+//        items(platList) { plant ->
+//            PlantCard(plant.name, plant.description, plant.imageRes)
+//        }
+//    }
 
 //@Composable
 //fun HomeScreens() {
@@ -531,3 +403,180 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        }
 //    }
 //}
+
+
+//@Composable
+//fun BottomNavigationBar(navController: NavHostController, backgroundColor: Color, contentColor: Color) {
+//    val items = listOf(
+//        BottomNavItem.Home,
+//        BottomNavItem.Profile,
+//        BottomNavItem.Contact,
+//        BottomNavItem.Notification,
+//        BottomNavItem.Setting
+//    )
+//    BottomNavigationBar(
+//        navController = navController,
+//        backgroundColor = backgroundColor,
+//        contentColor = contentColor,
+//    ) {
+//        val navBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryAsState()
+//        val currentRoute = navBackStackEntry?.destination?.route
+//        items.forEach { item ->
+//            BottomNavigationItem(
+//                icon = { Icon(painterResource = painterResource(id = item.icon), contentDescription = item.title) },
+//                label = { Text(text = item.title, fontSize = 9.sp) },
+//                selectedContentColor = Color.Black,
+//                unselectedContentColor = Color.Black.copy(0.4f),
+//                alwaysShowLabel = true,
+//                selected = currentRoute == item.screen_route,
+//                onClick = {
+//                    navController.navigate(item.screen_route) {
+//                        navController.graph.startDestinationRoute?.let { screen_route ->
+//                            popUpTo(screen_route) {
+//                                saveState = true
+//                            }
+//                        }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+//                }
+//            )
+//        }
+//    }
+//}
+
+//@ExperimentalMaterial3Api
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@Preview
+//@Composable
+//fun MainScreenView() {
+//    val navController = rememberNavController()
+//    Scaffold(
+//        bottomBar = {
+//            BottomNavigationBar(
+//                navController,
+//                backgroundColor = colorResource(id = R.color.teal_200),
+//                contentColor = Color.Black
+//            )
+//        }
+//    ) {
+//        NavigationGraph(navController = navController)
+//    }
+//}
+
+
+//@Composable
+//fun NavigationGraph(navController: NavHostController) {
+//    NavHost(navController, startDestination = BottomNavItem.Home.screen_route) {
+//        composable(BottomNavItem.Home.screen_route) {
+//            HomeScreen()
+//        }
+//        composable(BottomNavItem.Profile.screen_route) {
+//            ProfileScreen()
+//        }
+//        composable(BottomNavItem.Contact.screen_route) {
+//            ContactScreen()
+//        }
+//        composable(BottomNavItem.Notification.screen_route) {
+//            NotificationScreen()
+//        }
+//        composable(BottomNavItem.Setting.screen_route) {
+//            SettingScreen()
+//        }
+//    }
+//}
+
+@Composable
+fun HomeScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.teal_700))
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(
+            text = "Home Screen",
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+    }
+}
+
+@Composable
+fun ProfileScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.teal_700))
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(
+            text = "My Profile Screen",
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+    }
+}
+
+@Composable
+fun ContactScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.teal_700))
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(
+            text = "Add Contact Screen",
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+    }
+}
+
+@Composable
+fun NotificationScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.teal_700))
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(
+            text = "Notification Screen",
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+    }
+}
+
+@Composable
+fun SettingScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.teal_700))
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Text(
+            text = "Setting Screen",
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
+        )
+    }
+}
