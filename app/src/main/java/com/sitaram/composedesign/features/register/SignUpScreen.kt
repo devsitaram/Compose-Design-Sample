@@ -39,17 +39,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.component_util.HeadingTextComponent
-import com.sitaram.composedesign.features.component_util.InputTextField
-import com.sitaram.composedesign.features.component_util.NormalTextComponent
-import com.sitaram.composedesign.features.component_util.PasswordTextField
-import com.sitaram.composedesign.features.database.sqlite.SQLiterDBHelper
+import com.sitaram.composedesign.features.util.HeadingTextComponent
+import com.sitaram.composedesign.features.util.InputTextField
+import com.sitaram.composedesign.features.util.NormalTextComponent
+import com.sitaram.composedesign.features.util.PasswordTextField
 import com.sitaram.composedesign.features.main.User
 
 // Main/Parent UI design for Sign Up Screen
 @Preview
 @Composable
-public fun ViewOfSignUpScreen(navController: NavHostController){
+fun ViewOfSignUpScreen(navController: NavHostController){
 
     val context = LocalContext.current
     var userEmail by remember {

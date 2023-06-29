@@ -1,4 +1,4 @@
-package com.sitaram.composedesign.features.component_util
+package com.sitaram.composedesign.features.util
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

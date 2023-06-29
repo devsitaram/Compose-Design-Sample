@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +22,18 @@ import com.sitaram.composedesign.R
 @Composable
 fun SplashScreen() {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(modifier = Modifier.width(200.dp).padding(5.dp),
+        Image(modifier = Modifier
+            .width(200.dp)
+            .padding(5.dp),
             painter = painterResource(id = R.mipmap.img_compose),
             contentDescription = null
         )
+        Text(text = "Compose design")
     }
 }

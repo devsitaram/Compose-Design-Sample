@@ -39,11 +39,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.component_util.CheckboxComponent
-import com.sitaram.composedesign.features.component_util.HeadingTextComponent
-import com.sitaram.composedesign.features.component_util.InputTextField
-import com.sitaram.composedesign.features.component_util.NormalTextComponent
-import com.sitaram.composedesign.features.component_util.PasswordTextField
+import com.sitaram.composedesign.features.util.CheckboxComponent
+import com.sitaram.composedesign.features.util.HeadingTextComponent
+import com.sitaram.composedesign.features.util.InputTextField
+import com.sitaram.composedesign.features.util.NormalTextComponent
+import com.sitaram.composedesign.features.util.PasswordTextField
 import com.sitaram.composedesign.features.main.User
 
 // Main/Parent UI design for Sign Up Screen
