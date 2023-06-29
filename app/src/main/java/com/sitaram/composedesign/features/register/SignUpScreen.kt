@@ -1,8 +1,5 @@
 package com.sitaram.composedesign.features.register
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
@@ -31,36 +30,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.features.component_util.HeadingTextComponent
 import com.sitaram.composedesign.features.component_util.InputTextField
 import com.sitaram.composedesign.features.component_util.NormalTextComponent
-import com.sitaram.composedesign.features.component_util.OnclickTextComponent
 import com.sitaram.composedesign.features.component_util.PasswordTextField
-import com.sitaram.composedesign.features.database.room.DatabaseHelper
-import com.sitaram.composedesign.features.database.room.UserPojo
-import com.sitaram.composedesign.features.database.sqlite.RoomDBHelper
-import com.sitaram.composedesign.features.home.HomeActivity
-import com.sitaram.composedesign.features.login.LoginActivity
-import com.sitaram.composedesign.features.login.loginDetails
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.CompletableObserver
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.Objects
-
+import com.sitaram.composedesign.features.database.sqlite.SQLiterDBHelper
+import com.sitaram.composedesign.features.main.User
 
 // Main/Parent UI design for Sign Up Screen
+@Preview
 @Composable
-fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
+public fun ViewOfSignUpScreen(navController: NavHostController){
 
     val context = LocalContext.current
-
     var userEmail by remember {
         mutableStateOf("")
     }
@@ -84,7 +75,6 @@ fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
             .fillMaxSize() // size
             .background(Color.White) // background
             .padding(30.dp) // padding
-//            .align(Alignment.Center) // gravity center
     ) {
         // child layout file
         Column(
@@ -94,9 +84,9 @@ fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
             horizontalAlignment = Alignment.CenterHorizontally // gravity center
         ) {
             NormalTextComponent(
-                value = stringResource(id = R.string.hey),
+                text = stringResource(id = R.string.hey),
                 color = colorResource(id = R.color.softBlack)
-            ) // text
+            )
 
             HeadingTextComponent(
                 value = stringResource(
@@ -118,7 +108,7 @@ fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
             // username
             InputTextField(
                 userName,
-                painterResource = painterResource(id = R.drawable.ic_profile),
+                painterResource = painterResource(id = R.drawable.ic_person),
                 onValueChange = { userName = it },
                 label = stringResource(id = R.string.userName),
                 "The username is empty!"
@@ -127,7 +117,7 @@ fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
             // password
             PasswordTextField(
                 userPassword,
-                painterResource = painterResource(id = R.drawable.ic_password),
+                painterResource = painterResource(id = R.drawable.ic_lock),
                 onValueChange = { userPassword = it },
                 label = stringResource(id = R.string.userPassword)
             )
@@ -140,7 +130,11 @@ fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
                 isEnabled = isNotEmpty,
                 onClickAction = {
                     if (isNotEmpty) {
-                        registerDetails(userEmail, userName, userPassword, databaseHelper, context)
+                        val registerModel = RegisterModel()
+                        val isValidRegister = registerModel.registerDetails(userEmail, userName, userPassword, context)
+                        if (isValidRegister){
+                            navController.navigate(User.Login.route)
+                        }
                     } else {
                         Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
                     }
@@ -155,12 +149,12 @@ fun ViewOfSignUPScreen(databaseHelper: RoomDBHelper?) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 NormalTextComponent(
-                    value = stringResource(id = R.string.login_your),
+                    text = stringResource(id = R.string.login_your),
                     color = colorResource(id = R.color.softBlack)
                 )
-                OnclickTextComponent(
-                    value = stringResource(id = R.string.account),
-                    context = context
+                LoginTextComponent(
+                    text = stringResource(id = R.string.account),
+                    navController = navController
                 )
             }
         }
@@ -185,52 +179,20 @@ fun RegisterButton(value: String, isEnabled: Boolean = false, onClickAction: () 
     }
 }
 
-fun registerDetails(userEmail: String, userName: String, userPassword: String, databaseHelper: RoomDBHelper?, context: Context) {
-    // initialize the variable
-    val isValidEmail = emailValidation(userEmail)
-    val isValidName = nameValidation(userName)
-
-    if (isValidEmail && isValidName) {
-        // call the register button click method
-        val isRegisterSuccess= databaseHelper?.registerUser(userEmail, userName, userPassword)
-        if (isRegisterSuccess == true){
-            navigateToLoginPage(context = context)
-        } else {
-            Toast.makeText(context, "Please enter the valid data!", Toast.LENGTH_SHORT).show()
-        }
-    } else {
-        Toast.makeText(context, "Enter the valid details!", Toast.LENGTH_SHORT).show()
-    }
-}
-
-// check the username validation
-fun emailValidation(email: String): Boolean {
-    // get text fields text
-    val emailPattern = Regex("[a-zA-Z\\d._-]+@[a-z]+.+[a-z]+")
-    return email.matches(emailPattern)
-}
-
-// check the username validation
-fun nameValidation(username: String): Boolean {
-    val nameRegex = Regex("[A-Za-z\\s]+")
-    return username.matches(nameRegex)
-}
-
-// check the username validation
-fun passwordValidation(password: String): Boolean {
-    val nameRegex = Regex("[a-zA-Z0-9]")
-    return password.matches(nameRegex)
-}
-
-// navigation
-fun navigateToLoginPage(context: Context) {
-    val intent = Intent(context, LoginActivity::class.java)
-    context.startActivity(intent)
-    Toast.makeText(context, "Register Success.", Toast.LENGTH_SHORT).show()
-}
-
-@Preview
+// account
 @Composable
-fun ViewOfSignUPScreen() {
-//    SignUpScreen()
+fun LoginTextComponent(text: String, navController: NavHostController) {
+    ClickableText(
+        text = AnnotatedString(text),
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(horizontal = 5.dp),
+        style = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        onClick = {
+            navController.navigate(User.Login.route)
+        })
 }

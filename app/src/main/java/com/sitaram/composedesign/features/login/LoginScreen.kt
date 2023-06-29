@@ -1,8 +1,5 @@
 package com.sitaram.composedesign.features.login
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +18,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionContext
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,22 +36,21 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.features.component_util.CheckboxComponent
 import com.sitaram.composedesign.features.component_util.HeadingTextComponent
 import com.sitaram.composedesign.features.component_util.InputTextField
 import com.sitaram.composedesign.features.component_util.NormalTextComponent
 import com.sitaram.composedesign.features.component_util.PasswordTextField
-import com.sitaram.composedesign.features.database.room.DatabaseHelper
-import com.sitaram.composedesign.features.database.sqlite.RoomDBHelper
-import com.sitaram.composedesign.features.home.HomeActivity
-import com.sitaram.composedesign.features.register.RegisterActivity
+import com.sitaram.composedesign.features.main.User
 
 // Main/Parent UI design for Sign Up Screen
 @Composable
-fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
-
+fun ViewOfLoginScreen(navController: NavHostController) {
     val context = LocalContext.current
+    val loginModel = LoginModel()
 
     var userName by remember {
         mutableStateOf("")
@@ -91,7 +86,7 @@ fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
             horizontalAlignment = Alignment.CenterHorizontally // gravity center
         ) {
             NormalTextComponent(
-                value = stringResource(id = R.string.hey),
+                text = stringResource(id = R.string.hey),
                 color = colorResource(id = R.color.softBlack)
             ) // text
 
@@ -105,7 +100,7 @@ fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
             // username
             InputTextField(
                 userName,
-                painterResource = painterResource(id = R.drawable.ic_profile),
+                painterResource = painterResource(id = R.drawable.ic_person),
                 onValueChange = { userName = it },
                 label = stringResource(id = R.string.userName),
                 "The username is empty!"
@@ -114,7 +109,7 @@ fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
             // password
             PasswordTextField(
                 userPassword,
-                painterResource = painterResource(id = R.drawable.ic_password),
+                painterResource = painterResource(id = R.drawable.ic_lock),
                 onValueChange = { userPassword = it },
                 label = stringResource(id = R.string.userPassword)
             )
@@ -124,13 +119,21 @@ fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // the fields is not empty then button are visible
             // button
             LoginButton(
                 value = stringResource(id = R.string.login),
                 onClickAction = {
                     if (isDateValidated) {
-                        loginDetails(userName, userPassword, context, databaseHelper)
+                        val isValidLogin =  loginModel.loginDetails(userName, userPassword, context)
+                        if (isValidLogin){
+                            // navigate to the home screen
+                            navController.navigate(User.Main.route) {
+                                // kill the Login screen
+                                popUpTo(User.Login.route) {
+                                    inclusive = true
+                                }
+                            }
+                        }
                     } else {
                         Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
                     }
@@ -144,32 +147,16 @@ fun ViewOfLoginScreen(databaseHelper: RoomDBHelper?) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 NormalTextComponent(
-                    value = stringResource(id = R.string.register_your),
+                    text = stringResource(id = R.string.register_your),
                     color = colorResource(id = R.color.softBlack)
                 )
                 RegisterTextComponent(
                     value = stringResource(id = R.string.account),
-                    context = context
+                    navController = navController
                 )
             }
         }
     }
-}
-
-fun loginDetails(userName: String, userPassword: String, context: Context, databaseHelper: RoomDBHelper?) {
-    val isSuccess = databaseHelper?.getLoginUsers(userName,userPassword)
-    Log.e(" database Success","$isSuccess")
-    if (isSuccess == true) {
-        navigateToHome(context)
-    } else {
-        Toast.makeText(context, "Enter the valid details!", Toast.LENGTH_SHORT).show()
-    }
-}
-
-// navigation
-fun navigateToHome(context: Context) {
-    val intent = Intent(context, HomeActivity::class.java)
-    context.startActivity(intent)
 }
 
 // check the username validation
@@ -197,7 +184,7 @@ fun LoginButton(value: String, onClickAction: () -> Unit) {
 
 // account
 @Composable
-fun RegisterTextComponent(value: String, context: Context) {
+fun RegisterTextComponent(value: String, navController: NavController) {
     ClickableText(
         text = AnnotatedString(value),
         modifier = Modifier
@@ -209,7 +196,6 @@ fun RegisterTextComponent(value: String, context: Context) {
             fontStyle = FontStyle.Normal
         ),
         onClick = {
-            val intent = Intent(context, RegisterActivity::class.java)
-            context.startActivity(intent)
+            navController.navigate(User.Register.route)
         })
 }

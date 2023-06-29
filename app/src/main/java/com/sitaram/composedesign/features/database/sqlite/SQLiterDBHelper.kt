@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.sql.SQLException
 
-class RoomDBHelper : SQLiteOpenHelper {
+class SQLiterDBHelper : SQLiteOpenHelper {
 
     // create the companion object
     companion object {
@@ -41,7 +41,7 @@ class RoomDBHelper : SQLiteOpenHelper {
     }
 
     // insert the user
-    fun registerUser(email: String, username: String, userPassword: String): Boolean {
+    fun registerUser(email: String, username: String, userPassword: String): Boolean? {
         return try {
             val databaseWrite = this.writableDatabase // write only Insert, update, delete query
             val values = ContentValues()

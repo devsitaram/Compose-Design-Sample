@@ -48,8 +48,6 @@ android {
 
 dependencies {
 
-    var nav_version = "2.6.0"
-
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
@@ -69,10 +67,6 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-
-    implementation 'androidx.navigation:navigation-compose:2.6.0'
-    // navigation
-    implementation "androidx.navigation:navigation-compose:2.7.0-beta01"
 
     // room databases
     def room_version = "2.5.0"
@@ -99,5 +93,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10'
 
+    // navigation compose
+    implementation("androidx.compose.material:material:1.4.3")
     implementation 'androidx.navigation:navigation-compose:2.6.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 }

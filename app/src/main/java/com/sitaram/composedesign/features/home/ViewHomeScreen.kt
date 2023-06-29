@@ -1,76 +1,94 @@
 package com.sitaram.composedesign.features.home
 
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.features.home.pojo.FlowerPojo
-import com.sitaram.composedesign.ui.theme.Purple
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.sitaram.composedesign.features.main.ScreenItem
+import com.sitaram.composedesign.features.navigation.ContactScreen
+import com.sitaram.composedesign.features.navigation.HomeScreen
+import com.sitaram.composedesign.features.navigation.NotificationScreen
+import com.sitaram.composedesign.features.navigation.ProfileScreen
+import com.sitaram.composedesign.features.navigation.SettingsScreen
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewOfHomePage() {
-
-    val context = LocalContext.current
-
-    var number by remember { mutableIntStateOf(0) }
-    var inputNum by remember { mutableStateOf("") }
-
-    val isNumberValid by remember(inputNum) {
-        derivedStateOf {
-            inputNum.isNotEmpty()
+fun ViewOfMainPage(navController: NavHostController) {
+    val items = listOf(ScreenItem.Home, ScreenItem.Profile, ScreenItem.Contact, ScreenItem.Notification, ScreenItem.Setting,)
+    Scaffold(
+        bottomBar = {
+            BottomNavigation {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                items.forEach { screen ->
+                    BottomNavigationItem(
+                        icon = { Icon(painterResource(screen.icon), contentDescription = null) },
+                        label = { Text(screen.route) },
+                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                        onClick = {
+                            navController.navigate(screen.route) {
+                                // on the back stack as users select items
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // selecting the same item
+                                launchSingleTop = true
+                                // Restore state when selecting a previously selected item
+                                restoreState = true
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavHost(navController, startDestination = ScreenItem.Home.route, Modifier.padding(innerPadding)) {
+            composable(ScreenItem.Home.route) { HomeScreen(navController) }
+            composable(ScreenItem.Profile.route) { ProfileScreen(navController) }
+            composable(ScreenItem.Contact.route) { ContactScreen(navController) }
+            composable(ScreenItem.Notification.route) { NotificationScreen(navController) }
+            composable(ScreenItem.Setting.route) { SettingsScreen(navController) }
         }
     }
+}
+
+@Composable
+fun HomeScreens(navController: NavHostController) {
 
     val flowerList = mutableListOf<FlowerPojo>()
     flowerList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_aloevera))
@@ -84,41 +102,14 @@ fun ViewOfHomePage() {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(20.dp)
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier.padding(bottom = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            // input text
-            InputEditTextField(
-                inputNum,
-                onValueChange = { inputNum = it },
-                text = "Enter a number"
-            )
-            ButtonWithBorder(
-                onClickAction = {
-                    if (isNumberValid) {
-                        try {
-                            number = inputNum.toInt()
-                            Toast.makeText(context, "$number times show", Toast.LENGTH_SHORT)
-                                .show()
-                        } catch (_: NumberFormatException) {
-                            Toast.makeText(
-                                context,
-                                "Enter the valid number!",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    } else {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            )
-        }
+        Text(
+            "\uD83C\uDF3F  Plants and Flowers",
+            fontSize = 30.sp,
+            modifier = Modifier.padding(10.dp)
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -130,8 +121,6 @@ fun ViewOfHomePage() {
         }
     }
 }
-
-data class FlowerPojo(val name: String, val description: Int, val image: Int)
 
 @Composable
 fun PlantCard(name: String, description: Int, image: Int) {
@@ -164,45 +153,46 @@ fun PlantCard(name: String, description: Int, image: Int) {
     }
 }
 
-@Composable
-fun ButtonWithBorder(onClickAction: () -> Unit) {
-    Button(
-        modifier = Modifier.padding(5.dp),
-        onClick = onClickAction,
-        border = BorderStroke(1.dp, Color.Gray),
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
-    ) {
-        Text(text = "Click", color = Color.DarkGray)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text: String) {
-    Column {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .width(260.dp)
-                .height(70.dp)
-                .padding(top = 5.dp),
-            label = { Text(text) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedLabelColor = Purple,
-                cursorColor = Purple
-            ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        )
-        // if the fields is empty then show error message
-        if (value.isEmpty()) {
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "The fields is empty!", color = Color.Red)
-        }
-    }
-}
-
-
+//https://developer.android.com/jetpack/compose/navigation
+//
+//@Composable
+//fun ButtonWithBorder(onClickAction: () -> Unit) {
+//    Button(
+//        modifier = Modifier.padding(5.dp),
+//        onClick = onClickAction,
+//        border = BorderStroke(1.dp, Color.Gray),
+//        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+//    ) {
+//        Text(text = "Click", color = Color.DarkGray)
+//    }
+//}
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text: String) {
+//    Column {
+//        OutlinedTextField(
+//            value = value,
+//            onValueChange = onValueChange,
+//            modifier = Modifier
+//                .width(260.dp)
+//                .height(70.dp)
+//                .padding(top = 5.dp),
+//            label = { Text(text) },
+//            colors = TextFieldDefaults.outlinedTextFieldColors(
+//                focusedLabelColor = Purple,
+//                cursorColor = Purple
+//            ),
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+//        )
+//        // if the fields is empty then show error message
+//        if (value.isEmpty()) {
+//            Spacer(modifier = Modifier.height(4.dp))
+//            Text(text = "The fields is empty!", color = Color.Red)
+//        }
+//    }
+//}
+//
 //// button navigation bar
 //@Composable
 //fun ListItem(name: String) {
@@ -237,8 +227,81 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        }
 //    }
 //}
-
-
+//
+//@Preview
+//@Composable
+//fun ViewOfHomePage() {
+//
+//    val context = LocalContext.current
+//
+//    var number by remember { mutableIntStateOf(0) }
+//    var inputNum by remember { mutableStateOf("") }
+//
+//    val isNumberValid by remember(inputNum) {
+//        derivedStateOf {
+//            inputNum.isNotEmpty()
+//        }
+//    }
+//
+//    val flowerList = mutableListOf<FlowerPojo>()
+//    flowerList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_aloevera))
+//    flowerList.add(FlowerPojo("Rose", R.string.rose, R.mipmap.img_rose))
+//    flowerList.add(FlowerPojo("Calendula", R.string.calendula, R.mipmap.img_calendula))
+//    flowerList.add(FlowerPojo("Erigeron", R.string.erigeron, R.mipmap.img_erigeron))
+//    flowerList.add(FlowerPojo("Rhododendron", R.string.rhododendron, R.mipmap.img_rhododerndorn))
+//    flowerList.add(FlowerPojo("Bluebell", R.string.bluebell, R.mipmap.img_bluebell))
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(color = Color.White)
+//            .padding(20.dp)
+//    ) {
+//        Row(
+//            modifier = Modifier.padding(bottom = 10.dp),
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.Center
+//        ) {
+//            // input text
+//            InputEditTextField(
+//                inputNum,
+//                onValueChange = { inputNum = it },
+//                text = "Enter a number"
+//            )
+//            ButtonWithBorder(
+//                onClickAction = {
+//                    if (isNumberValid) {
+//                        try {
+//                            number = inputNum.toInt()
+//                            Toast.makeText(context, "$number times show", Toast.LENGTH_SHORT)
+//                                .show()
+//                        } catch (_: NumberFormatException) {
+//                            Toast.makeText(
+//                                context,
+//                                "Enter the valid number!",
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                        }
+//                    } else {
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG).show()
+//                        }
+//                    }
+//                }
+//            )
+//        }
+//        LazyColumn(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(Color.White),
+//        ) {
+//            items(flowerList) { plant ->
+//                PlantCard(plant.name, plant.description, plant.image)
+//            }
+//        }
+//    }
+//}
+//
 //LazyColumn(modifier = Modifier.fillMaxSize(),
 //        contentPadding = PaddingValues(15.dp),
 //    ){
@@ -326,8 +389,7 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        }
 //    }
 //}
-
-
+//
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 //@OptIn(ExperimentalMaterial3Api::class)
 //@Composable
@@ -403,8 +465,7 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        }
 //    }
 //}
-
-
+//
 //@Composable
 //fun BottomNavigationBar(navController: NavHostController, backgroundColor: Color, contentColor: Color) {
 //    val items = listOf(
@@ -444,7 +505,7 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        }
 //    }
 //}
-
+//
 //@ExperimentalMaterial3Api
 //@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 //@Preview
@@ -463,8 +524,7 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        NavigationGraph(navController = navController)
 //    }
 //}
-
-
+//
 //@Composable
 //fun NavigationGraph(navController: NavHostController) {
 //    NavHost(navController, startDestination = BottomNavItem.Home.screen_route) {
@@ -485,98 +545,98 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
 //        }
 //    }
 //}
-
-@Composable
-fun HomeScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Home Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun ProfileScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "My Profile Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun ContactScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Add Contact Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun NotificationScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Notification Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun SettingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Setting Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
+//
+//@Composable
+//fun HomeScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(colorResource(id = R.color.teal_700))
+//            .wrapContentSize(Alignment.Center)
+//    ) {
+//        Text(
+//            text = "Home Screen",
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White,
+//            modifier = Modifier.align(Alignment.CenterHorizontally),
+//            textAlign = TextAlign.Center,
+//            fontSize = 20.sp
+//        )
+//    }
+//}
+//
+//@Composable
+//fun ProfileScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(colorResource(id = R.color.teal_700))
+//            .wrapContentSize(Alignment.Center)
+//    ) {
+//        Text(
+//            text = "My Profile Screen",
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White,
+//            modifier = Modifier.align(Alignment.CenterHorizontally),
+//            textAlign = TextAlign.Center,
+//            fontSize = 20.sp
+//        )
+//    }
+//}
+//
+//@Composable
+//fun ContactScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(colorResource(id = R.color.teal_700))
+//            .wrapContentSize(Alignment.Center)
+//    ) {
+//        Text(
+//            text = "Add Contact Screen",
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White,
+//            modifier = Modifier.align(Alignment.CenterHorizontally),
+//            textAlign = TextAlign.Center,
+//            fontSize = 20.sp
+//        )
+//    }
+//}
+//
+//@Composable
+//fun NotificationScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(colorResource(id = R.color.teal_700))
+//            .wrapContentSize(Alignment.Center)
+//    ) {
+//        Text(
+//            text = "Notification Screen",
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White,
+//            modifier = Modifier.align(Alignment.CenterHorizontally),
+//            textAlign = TextAlign.Center,
+//            fontSize = 20.sp
+//        )
+//    }
+//}
+//
+//@Composable
+//fun SettingScreen() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(colorResource(id = R.color.teal_700))
+//            .wrapContentSize(Alignment.Center)
+//    ) {
+//        Text(
+//            text = "Setting Screen",
+//            fontWeight = FontWeight.Bold,
+//            color = Color.White,
+//            modifier = Modifier.align(Alignment.CenterHorizontally),
+//            textAlign = TextAlign.Center,
+//            fontSize = 20.sp
+//        )
+//    }
+//}

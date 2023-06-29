@@ -1,21 +1,13 @@
 package com.sitaram.composedesign.features.component_util
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,16 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,16 +35,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.login.LoginActivity
 import com.sitaram.composedesign.ui.theme.Purple
 
 // normal text
 @Composable
-fun NormalTextComponent(value: String, color: Color) {
+fun NormalTextComponent(text: String, color: Color) {
     Text(
-        text = value,
+        text = text,
         modifier = Modifier
             .wrapContentHeight()
 //            .heightIn(5.dp) // height
@@ -69,39 +55,6 @@ fun NormalTextComponent(value: String, color: Color) {
         textAlign = TextAlign.Center,
         color = color
     )
-}
-
-// account
-@Composable
-fun OnclickTextComponent(value: String, context: Context) {
-//    Text(
-//        text = value,
-//        modifier = Modifier
-//            .wrapContentHeight()
-//            .padding(horizontal = 5.dp),
-//        style = TextStyle(
-//            fontSize = 24.sp,
-//            fontWeight = FontWeight.Normal,
-//            fontStyle = FontStyle.Normal
-//        ),
-//        textAlign = TextAlign.Center,
-//        color = colorResource(id = R.color.purple_700),
-//    )
-
-    ClickableText(
-        text = AnnotatedString(value),
-        modifier = Modifier
-            .wrapContentHeight()
-            .padding(horizontal = 5.dp),
-        style = TextStyle(
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Normal,
-            fontStyle = FontStyle.Normal
-        ),
-        onClick = {
-            val intent = Intent(context, LoginActivity::class.java)
-            context.startActivity(intent)
-        })
 }
 
 
@@ -192,7 +145,7 @@ fun PasswordTextField(
             },
             trailingIcon = {
                 val iconImage = if (passwordVisible.value) {
-                    painterResource(R.drawable.ic_password_off)
+                    painterResource(R.drawable.ic_password_invisible)
                 } else {
                     painterResource(R.drawable.ic_password_visible)
                 }

@@ -15,7 +15,6 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun loginUser(userName: String, userPassword: String) {
         userRepository.getUserDetails(name = userName, password = userPassword)
     }
-
     fun updateUser(user: UserPojo) {
         userRepository.updateUserDetails(newUser = user)
     }
