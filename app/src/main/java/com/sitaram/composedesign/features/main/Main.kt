@@ -20,9 +20,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sitaram.composedesign.features.contact.ContactScreen
 import com.sitaram.composedesign.features.home.HomeScreen
 import com.sitaram.composedesign.features.login.ViewOfLoginScreen
-import com.sitaram.composedesign.features.navigation.ContactScreen
 import com.sitaram.composedesign.features.navigation.MessageScreen
 import com.sitaram.composedesign.features.navigation.ProfileScreen
 import com.sitaram.composedesign.features.register.ViewOfSignUpScreen
@@ -60,7 +60,18 @@ fun ViewOfMainPage() {
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
                     BottomNavigationItem(modifier = Modifier.background(color = Color.White),
-                        icon = { Icon(painterResource(screen.icon), contentDescription = null) },
+                        icon = {
+                            Icon(
+                                painterResource(screen.icon),
+                                contentDescription = null,
+                                // Set the desired icon color
+                                tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) {
+                                    Color.Black
+                                } else {
+                                    Color.Gray
+                                }
+                            )
+                        },
                         label = { Text(screen.route) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
@@ -90,6 +101,59 @@ fun ViewOfMainPage() {
     }
 }
 
+
+
+//@Composable
+//fun NavigationAppHost(navController: NavHostController) {
+//    val context = LocalContext.current
+//    NavHost(navController = navController, startDestination = "auth/login") {
+//
+//        // login and register page
+//        navigation(
+//            startDestination = "login",
+//            route = "auth"
+//        ) {
+//            composable(User.Login.route) {
+//                ViewOfLoginScreen(navController)
+//            }
+//
+//            composable(User.Register.route) {
+//                ViewOfSignUpScreen(navController)
+//            }
+//        }
+//
+//        // main page
+//        navigation(
+//            startDestination = "Home",
+//            route = "auth"
+//        ) {
+//            composable(ScreenItem.Home.route) {
+//                HomeScreen(navController)
+//            }
+//
+//            composable(ScreenItem.Profile.route) {
+//                ProfileScreen(navController)
+//            }
+//
+//            composable(ScreenItem.Contact.route) {
+//                ContactScreen(navController)
+//            }
+//
+//            composable(ScreenItem.Notification.route){
+//                NotificationScreen(navController)
+//            }
+//
+//            composable(ScreenItem.Setting.route) {navBackStackEntity ->
+//                val elementId = navBackStackEntity.arguments?.getInt("elementId")
+//                if(elementId == null){
+//                    Toast.makeText(context, "ElementId is required", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    SettingsScreen(elementId)
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 //@Composable

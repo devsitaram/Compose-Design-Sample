@@ -57,7 +57,7 @@ class SQLiterDBHelper : SQLiteOpenHelper {
 
     // get data from database
     @SuppressLint("Recycle")
-    fun getLoginUsers(name: String, password: String): Boolean? {
+    fun getLoginUsers(name: String, password: String): Boolean {
         // create the object of sqLiteDatabase and call the getReadableDatabase methods
         val sqLiteDatabase = this.readableDatabase
         val cursor = sqLiteDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)

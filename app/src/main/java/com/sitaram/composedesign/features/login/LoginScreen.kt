@@ -159,12 +159,6 @@ fun ViewOfLoginScreen(navController: NavHostController) {
     }
 }
 
-// check the username validation
-fun nameValidation(username: String): Boolean {
-    val nameRegex = Regex("[a-zA-Z]\\d[a-zA-Z]")
-    return username.matches(nameRegex)
-}
-
 @Composable
 fun LoginButton(value: String, onClickAction: () -> Unit) {
     Button(
@@ -174,11 +168,7 @@ fun LoginButton(value: String, onClickAction: () -> Unit) {
         contentPadding = PaddingValues(15.dp),
         onClick = onClickAction,
     ) {
-        Text(
-            text = value,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Text(text = value, fontSize = 20.sp, fontWeight = FontWeight.Bold)
     }
 }
 

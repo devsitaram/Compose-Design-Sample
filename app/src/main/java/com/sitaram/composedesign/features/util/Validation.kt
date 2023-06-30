@@ -3,7 +3,7 @@ package com.sitaram.composedesign.features.util
 class Validation {
 
     // check the username validation
-    public fun emailValidation(email: String): Boolean {
+    fun emailValidation(email: String): Boolean {
         // get text fields text
         val emailPattern = Regex("[a-zA-Z\\d._-]+@[a-z]+.+[a-z]+")
         return email.matches(emailPattern)
