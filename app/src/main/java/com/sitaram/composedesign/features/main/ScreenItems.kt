@@ -8,10 +8,10 @@ sealed class User(var route: String) {
     object Main: User("Main")
 }
 
-sealed class ScreenItem(var title: String, var icon: Int, var route: String) {
-    object Home : ScreenItem("Home", R.drawable.ic_home, "Home")
-    object Profile : ScreenItem("Profile", R.drawable.ic_person, "Profile")
-    object Contact : ScreenItem("Contact", R.drawable.ic_setting, "Contact")
-    object Notification : ScreenItem("Notification", R.drawable.ic_notification, "Notification")
-    object Setting : ScreenItem("Setting", R.drawable.ic_setting, "Setting")
+sealed class ScreenItem(var icon: Int, var route: String) {
+    object Home : ScreenItem(R.drawable.ic_home, "Home")
+    object Profile : ScreenItem(R.drawable.ic_person, "Profile")
+    object Message : ScreenItem(R.drawable.ic_message, "Message")
+    object Contact : ScreenItem(R.drawable.ic_contact, "Contact")
+    object Setting : ScreenItem(R.drawable.ic_setting, "Setting")
 }

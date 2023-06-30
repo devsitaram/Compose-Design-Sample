@@ -45,7 +45,6 @@ fun NormalTextComponent(text: String, color: Color) {
         text = text,
         modifier = Modifier
             .wrapContentHeight()
-//            .heightIn(5.dp) // height
             .padding(horizontal = 5.dp),  // Specify the desired padding value
         style = TextStyle(
             fontSize = 24.sp,
@@ -79,13 +78,7 @@ fun HeadingTextComponent(value: String, color: Color) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputTextField(
-    value: String,
-    painterResource: Painter,
-    onValueChange: (String) -> Unit = {},
-    label: String,
-    error: String
-) {
+fun InputTextField(value: String, painterResource: Painter, onValueChange: (String) -> Unit = {}, label: String, error: String) {
     Column {
         OutlinedTextField(
             value = value,
@@ -94,6 +87,7 @@ fun InputTextField(
                 .fillMaxWidth()
                 .height(70.dp)
                 .padding(top = 5.dp),
+            // hint
             label = {
                 Text(label)
             },
@@ -101,7 +95,7 @@ fun InputTextField(
                 focusedLabelColor = Purple,
                 cursorColor = Purple
             ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             leadingIcon = {
                 Icon(painter = painterResource, contentDescription = "")
             },
@@ -163,7 +157,7 @@ fun PasswordTextField(
         // if the fields is empty then show error message
         if (value.isEmpty()) {
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "The password is empty!", color = Color.Red)
+            Text(text = "Enter the valid password", color = Color.Red)
         }
     }
 }

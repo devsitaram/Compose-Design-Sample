@@ -3,16 +3,18 @@ package com.sitaram.composedesign.features.register
 import android.content.Context
 import android.widget.Toast
 import com.sitaram.composedesign.features.database.sqlite.SQLiterDBHelper
+import com.sitaram.composedesign.features.util.Validation
 
 class RegisterModel {
 
     // register function
     fun registerDetails(userEmail: String, userName: String, userPassword: String, context: Context): Boolean {
         val databaseHelper = SQLiterDBHelper(context)
+        val validation = Validation()
 
         // initialize the variable
-        val isValidEmail = emailValidation(userEmail)
-        val isValidName = nameValidation(userName)
+        val isValidEmail = validation.emailValidation(userEmail)
+        val isValidName = validation.nameValidation(userName)
 
         return if (isValidEmail && isValidName) {
             // call the register button click method
@@ -28,24 +30,5 @@ class RegisterModel {
             Toast.makeText(context, "Enter the valid details!", Toast.LENGTH_SHORT).show()
             false
         }
-    }
-
-    // check the username validation
-    private fun emailValidation(email: String): Boolean {
-        // get text fields text
-        val emailPattern = Regex("[a-zA-Z\\d._-]+@[a-z]+.+[a-z]+")
-        return email.matches(emailPattern)
-    }
-
-    // check the username validation
-    private fun nameValidation(username: String): Boolean {
-        val nameRegex = Regex("[A-Za-z\\s]+")
-        return username.matches(nameRegex)
-    }
-
-    // check the username validation
-    private fun passwordValidation(password: String): Boolean {
-        val nameRegex = Regex("[a-zA-Z0-9]")
-        return password.matches(nameRegex)
     }
 }

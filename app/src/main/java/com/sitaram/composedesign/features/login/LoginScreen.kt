@@ -103,7 +103,7 @@ fun ViewOfLoginScreen(navController: NavHostController) {
                 painterResource = painterResource(id = R.drawable.ic_person),
                 onValueChange = { userName = it },
                 label = stringResource(id = R.string.userName),
-                "The username is empty!"
+                "Enter the valid username"
             )
 
             // password
@@ -197,5 +197,6 @@ fun RegisterTextComponent(value: String, navController: NavController) {
         ),
         onClick = {
             navController.navigate(User.Register.route)
-        })
+        }
+    )
 }

@@ -101,7 +101,7 @@ fun ViewOfSignUpScreen(navController: NavHostController){
                 painterResource(id = R.drawable.ic_email),
                 onValueChange = { userEmail = it },
                 label = stringResource(id = R.string.userEmail),
-                "The email is empty!"
+                "Enter the valid email"
             )
 
             // username
@@ -110,7 +110,7 @@ fun ViewOfSignUpScreen(navController: NavHostController){
                 painterResource = painterResource(id = R.drawable.ic_person),
                 onValueChange = { userName = it },
                 label = stringResource(id = R.string.userName),
-                "The username is empty!"
+                "Enter the valid username"
             )
 
             // password

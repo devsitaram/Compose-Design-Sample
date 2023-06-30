@@ -12,42 +12,25 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.sitaram.composedesign.R
 import com.sitaram.composedesign.features.home.pojo.FlowerPojo
-import com.sitaram.composedesign.features.main.ScreenItem
-import com.sitaram.composedesign.features.navigation.ContactScreen
-import com.sitaram.composedesign.features.navigation.HomeScreen
-import com.sitaram.composedesign.features.navigation.NotificationScreen
-import com.sitaram.composedesign.features.navigation.ProfileScreen
-import com.sitaram.composedesign.features.navigation.SettingsScreen
 
 @Composable
-fun HomeScreens(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController) {
 
     val flowerList = mutableListOf<FlowerPojo>()
     flowerList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_aloevera))
@@ -61,7 +44,7 @@ fun HomeScreens(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(20.dp),
+            .padding(top = 15.dp,  bottom = 5.dp, start = 15.dp, end = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -112,4 +95,18 @@ fun PlantCard(name: String, description: Int, image: Int) {
     }
 }
 
+
 //https://developer.android.com/jetpack/compose/navigation
+
+//https://www.youtube.com/watch?v=wNlj_IQ8_Yk
+
+//Box(
+//modifier = Modifier.fillMaxSize()
+//) {
+//    // Background Image
+//    Image(
+//        painter = painterResource(R.drawable.background_image),
+//        contentDescription = null,
+//        modifier = Modifier.fillMaxSize(),
+//        contentScale = ContentScale.FillBounds
+//    )

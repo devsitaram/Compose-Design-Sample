@@ -1,5 +1,6 @@
 package com.sitaram.composedesign.features.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,22 +21,9 @@ import com.sitaram.composedesign.features.main.User
 import com.sitaram.composedesign.features.register.ViewOfSignUpScreen
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Home")
-        Button(onClick = { navController.navigate(ScreenItem.Setting.route) }) {
-        }
-    }
-}
-
-@Composable
 fun ProfileScreen(navController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(color = Color.Blue),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -51,7 +40,7 @@ fun ProfileScreen(navController: NavHostController) {
 @Composable
 fun ContactScreen(navController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(color = Color.Red),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -60,30 +49,13 @@ fun ContactScreen(navController: NavHostController) {
 }
 
 @Composable
-fun NotificationScreen(navController: NavHostController) {
+fun MessageScreen(navController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(color = Color.Yellow),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Contact")
-    }
-}
-
-@Composable
-fun SettingsScreen(navController: NavHostController) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Settings")
-        }
+        Text(text = "Message")
     }
 }
 

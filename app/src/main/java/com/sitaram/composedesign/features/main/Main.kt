@@ -1,5 +1,6 @@
 package com.sitaram.composedesign.features.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,13 +20,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sitaram.composedesign.features.home.HomeScreen
 import com.sitaram.composedesign.features.login.ViewOfLoginScreen
 import com.sitaram.composedesign.features.navigation.ContactScreen
-import com.sitaram.composedesign.features.navigation.HomeScreen
-import com.sitaram.composedesign.features.navigation.NotificationScreen
+import com.sitaram.composedesign.features.navigation.MessageScreen
 import com.sitaram.composedesign.features.navigation.ProfileScreen
-import com.sitaram.composedesign.features.navigation.SettingsScreen
 import com.sitaram.composedesign.features.register.ViewOfSignUpScreen
+import com.sitaram.composedesign.features.setting.SettingsScreen
 
 @Composable
 fun NavigationAppHost(navController: NavHostController) {
@@ -50,14 +52,14 @@ fun NavigationAppHost(navController: NavHostController) {
 @Composable
 fun ViewOfMainPage() {
     val navController = rememberNavController()
-    val items = listOf(ScreenItem.Home, ScreenItem.Profile, ScreenItem.Contact, ScreenItem.Notification, ScreenItem.Setting,)
+    val items = listOf(ScreenItem.Home, ScreenItem.Profile, ScreenItem.Message, ScreenItem.Contact, ScreenItem.Setting,)
     Scaffold(
         bottomBar = {
             BottomNavigation {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
-                    BottomNavigationItem(
+                    BottomNavigationItem(modifier = Modifier.background(color = Color.White),
                         icon = { Icon(painterResource(screen.icon), contentDescription = null) },
                         label = { Text(screen.route) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
@@ -81,16 +83,12 @@ fun ViewOfMainPage() {
         NavHost(navController, startDestination = ScreenItem.Home.route, Modifier.padding(innerPadding)) {
             composable(ScreenItem.Home.route) { HomeScreen(navController) }
             composable(ScreenItem.Profile.route) { ProfileScreen(navController) }
+            composable(ScreenItem.Message.route) { MessageScreen(navController) }
             composable(ScreenItem.Contact.route) { ContactScreen(navController) }
-            composable(ScreenItem.Notification.route) { NotificationScreen(navController) }
             composable(ScreenItem.Setting.route) { SettingsScreen(navController) }
         }
     }
 }
-
-
-
-
 
 
 
