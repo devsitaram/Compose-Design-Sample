@@ -3,6 +3,7 @@ package com.sitaram.composedesign.features.database.sqlite
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.sql.SQLException
@@ -14,15 +15,15 @@ class SQLiterDBHelper : SQLiteOpenHelper {
         // initialize the variable
         private const val DATABASE_NAME = "UserDB"
         private const val DATABASE_VIRION = 1
-        private const val TABLE_NAME = "user"
-        private const val KEY_ID = "id"
+        const val TABLE_NAME = "user"
+        const val KEY_ID = "id"
         const val KEY_EMAIL = "email"
         const val KEY_NAME = "username"
         const val KEY_PASSWORD = "password"
     }
 
     // create the constructor
-    constructor(context: Context?): super(context, DATABASE_NAME, null, DATABASE_VIRION)
+    constructor(context: Context?) : super(context, DATABASE_NAME, null, DATABASE_VIRION)
 
     // create the database
     override fun onCreate(db: SQLiteDatabase) {

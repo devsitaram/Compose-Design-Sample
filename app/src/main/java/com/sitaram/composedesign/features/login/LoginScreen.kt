@@ -50,20 +50,16 @@ import com.sitaram.composedesign.features.main.User
 @Composable
 fun ViewOfLoginScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val loginModel = LoginModel()
+    val loginViewModel = LoginViewModel()
 
-    var userName by remember {
-        mutableStateOf("")
-    }
+    var userName by remember { mutableStateOf("") }
 
-    var userPassword by remember {
-        mutableStateOf("")
-    }
+    var userPassword by remember { mutableStateOf("") }
 
     // if the input fields are not empty then the button is visible
     val isDateValidated by remember {
         derivedStateOf {
-            if (userName.isEmpty() && userPassword.isEmpty()) {
+            if (userName.isEmpty() || userPassword.isEmpty()) {
                 Toast.makeText(context, "The fields is empty", Toast.LENGTH_LONG).show()
                 return@derivedStateOf false
             } else {
@@ -71,6 +67,28 @@ fun ViewOfLoginScreen(navController: NavHostController) {
             }
         }
     }
+
+    // Login button click handler
+    val onLoginClick: () -> Unit = {
+        if (isDateValidated) {
+            val isValidLogin = loginViewModel.loginDetails(userName, userPassword, context)
+            if (isValidLogin == true) {
+                // Navigate to the home screen
+                navController.navigate(User.Main.route) {
+                    // Kill the Login screen
+                    popUpTo(User.Login.route) {
+                        inclusive = true
+                    }
+                }
+                Toast.makeText(context, "Login Successful.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(context, "The fields is empty!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     // sign screen page
     Surface(
         modifier = Modifier
@@ -119,28 +137,14 @@ fun ViewOfLoginScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // button
+            // login button
             LoginButton(
                 value = stringResource(id = R.string.login),
-                onClickAction = {
-                    if (isDateValidated) {
-                        val isValidLogin =  loginModel.loginDetails(userName, userPassword, context)
-                        if (isValidLogin){
-                            // navigate to the home screen
-                            navController.navigate(User.Main.route) {
-                                // kill the Login screen
-                                popUpTo(User.Login.route) {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    } else {
-                        Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
-                    }
-                },
+                onClickAction = onLoginClick
             )
+
             Spacer(modifier = Modifier.height(50.dp))
-            Divider(modifier = Modifier.fillMaxWidth()) // sign the divider
+            Divider(modifier = Modifier.fillMaxWidth()) // divider
             // register text
             Row(
                 modifier = Modifier.fillMaxWidth(),
