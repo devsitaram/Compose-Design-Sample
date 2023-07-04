@@ -58,16 +58,3 @@ fun ProfileScreen(navController: NavHostController) {
         }
     }
 }
-
-@Composable
-fun MessageScreen(navController: NavHostController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Yellow),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Message", color = Color.Black, fontSize = 50.sp)
-    }
-}

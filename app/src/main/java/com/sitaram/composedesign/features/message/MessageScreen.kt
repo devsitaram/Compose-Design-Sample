@@ -1,9 +1,8 @@
-package com.sitaram.composedesign.features.contact
+package com.sitaram.composedesign.features.message
 
 import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,22 +42,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Composable
-fun Contact(navController: NavHostController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Red),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Contact", color = Color.White, fontSize = 50.sp)
-    }
-}
 
 // recycler
 @Composable
-fun ContactScreen(navController: NavHostController) {
+fun MessageScreen(navController: NavHostController) {
 
     val context = LocalContext.current
     var number by remember { mutableStateOf(0) }
@@ -121,7 +108,7 @@ fun Greeting(i: Int) {
         if (expanded) 70.dp else 0.dp
     )
     Surface(
-        color = colorScheme.primary,
+        color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 4.dp)
     ) {
         Row(modifier = Modifier.padding(24.dp)) {
@@ -182,86 +169,3 @@ fun InputEditTextField(value: String, onValueChange: (String) -> Unit = {}, text
         }
     }
 }
-
-//// recycler
-//@Composable
-//fun ContactScreen(navController: NavHostController) {
-//    val context = LocalContext.current
-//    var number = 0
-//    var inputNum by remember { mutableStateOf("") }
-//
-//    val isNumberValid by remember(inputNum) {
-//        derivedStateOf {
-//            inputNum.isNotEmpty()
-//        }
-//    }
-//
-//    val platList = mutableListOf<FlowerPojo>()
-//    platList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_leave))
-//
-//    Surface(modifier = Modifier.fillMaxSize()) {
-//        Column(modifier = Modifier.fillMaxSize().padding(15.dp).verticalScroll(rememberScrollState())
-//        ) {
-//            Row(modifier = Modifier.fillMaxSize().padding(bottom = 10.dp),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Center
-//            ) {
-//                // input text
-//                InputEditTextField(
-//                    inputNum,
-//                    onValueChange = { inputNum = it },
-//                    text = "Enter a number"
-//                )
-//                ButtonWithBorder(
-//                    onClickAction = {
-//                        if (isNumberValid) {
-//                            number = inputNum.toInt()
-//                        } else {
-//                            CoroutineScope(Dispatchers.Main).launch {
-//                                Toast.makeText(context, "The field is empty!", Toast.LENGTH_LONG)
-//                                    .show()
-//                            }
-//                        }
-//                    }
-//                )
-//            }
-//            var num = 1
-//            if (number == 0) {
-//                RecyclerView("Hello", 0)
-//            }
-//            while (num <= number) {
-//                RecyclerView("Hello", num)
-//                num++
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun RecyclerView(name: String, num: Int) {
-//    var expanded by remember { mutableStateOf(false) }
-//
-//    val extraPadding by animateDpAsState(
-//        if (expanded) 25.dp else 0.dp
-//    )
-//    Surface(
-//        color = colorScheme.primary,
-//        modifier = Modifier.padding(vertical = 4.dp, horizontal = 4.dp)
-//    ) {
-//        Row(modifier = Modifier.padding(24.dp)) {
-//            Column(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .padding(bottom = extraPadding)
-//            ) {
-//                Text(text = "$num")
-//                Text(text = name)
-//            }
-//            ElevatedButton(
-//                onClick = { expanded = !expanded }
-//            ) {
-//                Text(if (expanded) "Show less" else "Show more")
-//            }
-//        }
-//    }
-//}

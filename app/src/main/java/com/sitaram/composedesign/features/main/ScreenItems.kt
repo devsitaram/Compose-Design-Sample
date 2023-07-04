@@ -12,6 +12,6 @@ sealed class ScreenItem(var icon: Int, var route: String) {
     object Home : ScreenItem(R.drawable.ic_home, "Home")
     object Profile : ScreenItem(R.drawable.ic_person, "Profile")
     object Message : ScreenItem(R.drawable.ic_message, "Message")
-    object Contact : ScreenItem(R.drawable.ic_contact, "Contact")
+    object Game : ScreenItem(R.drawable.ic_game, "Game")
     object Setting : ScreenItem(R.drawable.ic_setting, "Setting")
 }

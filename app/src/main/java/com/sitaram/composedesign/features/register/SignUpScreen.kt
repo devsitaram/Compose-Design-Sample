@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,6 +66,19 @@ fun ViewOfSignUpScreen(navController: NavHostController){
     val isNotEmpty by remember {
         derivedStateOf {
             !userEmail.isEmpty() && !userName.isEmpty() && !userPassword.isEmpty()
+        }
+    }
+
+    // on click funcation
+    val onClickAction: () -> Unit = {
+        if (isNotEmpty) {
+            val signUpViewModel = SignUpViewModel()
+            val isValidRegister = signUpViewModel.registerDetail(userEmail, userName, userPassword, context)
+            if (isValidRegister){
+                navController.navigate(User.Login.route)
+            }
+        } else {
+            Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -127,17 +141,7 @@ fun ViewOfSignUpScreen(navController: NavHostController){
             RegisterButton(
                 value = stringResource(id = R.string.signup),
                 isEnabled = isNotEmpty,
-                onClickAction = {
-                    if (isNotEmpty) {
-                        val registerModel = RegisterModel()
-                        val isValidRegister = registerModel.registerDetails(userEmail, userName, userPassword, context)
-                        if (isValidRegister){
-                            navController.navigate(User.Login.route)
-                        }
-                    } else {
-                        Toast.makeText(context, "Invalid username!", Toast.LENGTH_LONG).show()
-                    }
-                },
+                onClickAction = onClickAction,
             )
 
             Spacer(modifier = Modifier.height(70.dp))
@@ -162,6 +166,9 @@ fun ViewOfSignUpScreen(navController: NavHostController){
 
 @Composable
 fun RegisterButton(value: String, isEnabled: Boolean = false, onClickAction: () -> Unit) {
+    OutlinedButton(onClick = { /*TODO*/ }) {
+
+    }
     Button(
         modifier = Modifier
             .fillMaxWidth()

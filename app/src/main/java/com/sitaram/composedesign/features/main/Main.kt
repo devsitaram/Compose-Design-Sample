@@ -20,17 +20,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sitaram.composedesign.features.contact.ContactScreen
+import com.sitaram.composedesign.features.game.GameScreen
 import com.sitaram.composedesign.features.home.HomeScreen
 import com.sitaram.composedesign.features.login.ViewOfLoginScreen
-import com.sitaram.composedesign.features.navigation.MessageScreen
+import com.sitaram.composedesign.features.message.MessageScreen
 import com.sitaram.composedesign.features.navigation.ProfileScreen
 import com.sitaram.composedesign.features.register.ViewOfSignUpScreen
 import com.sitaram.composedesign.features.setting.SettingsScreen
 
 @Composable
 fun NavigationAppHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "Login") {
+    NavHost(navController = navController, startDestination = "Main") {
         // login
         composable(User.Login.route) {
             ViewOfLoginScreen(navController)
@@ -52,7 +52,7 @@ fun NavigationAppHost(navController: NavHostController) {
 @Composable
 fun ViewOfMainPage() {
     val navController = rememberNavController()
-    val items = listOf(ScreenItem.Home, ScreenItem.Profile, ScreenItem.Message, ScreenItem.Contact, ScreenItem.Setting,)
+    val items = listOf(ScreenItem.Home, ScreenItem.Profile, ScreenItem.Message, ScreenItem.Game, ScreenItem.Setting,)
     Scaffold(
         bottomBar = {
             BottomNavigation {
@@ -95,7 +95,7 @@ fun ViewOfMainPage() {
             composable(ScreenItem.Home.route) { HomeScreen(navController) }
             composable(ScreenItem.Profile.route) { ProfileScreen(navController) }
             composable(ScreenItem.Message.route) { MessageScreen(navController) }
-            composable(ScreenItem.Contact.route) { ContactScreen(navController) }
+            composable(ScreenItem.Game.route) { GameScreen(navController) }
             composable(ScreenItem.Setting.route) { SettingsScreen(navController) }
         }
     }
