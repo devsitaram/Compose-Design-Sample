@@ -2,6 +2,7 @@ package com.sitaram.composedesign.features.game.pojo
 
 data class GameItems(
 	val id: Int? = null,
+	val title: String? = null,
 	val shortDescription: String? = null,
 	val thumbnail: String? = null,
 	val gameUrl: String? = null,
@@ -10,7 +11,6 @@ data class GameItems(
 	val genre: String? = null,
 	val publisher: String? = null,
 	val developer: String? = null,
-	val title: String? = null,
 	val platform: String? = null
 )
 

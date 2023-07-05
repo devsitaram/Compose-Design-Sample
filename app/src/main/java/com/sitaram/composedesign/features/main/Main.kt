@@ -92,11 +92,11 @@ fun ViewOfMainPage() {
         }
     ) { innerPadding ->
         NavHost(navController, startDestination = ScreenItem.Home.route, Modifier.padding(innerPadding)) {
-            composable(ScreenItem.Home.route) { HomeScreen(navController) }
-            composable(ScreenItem.Profile.route) { ProfileScreen(navController) }
-            composable(ScreenItem.Message.route) { MessageScreen(navController) }
-            composable(ScreenItem.Game.route) { GameScreen(navController) }
-            composable(ScreenItem.Setting.route) { SettingsScreen(navController) }
+            composable(ScreenItem.Home.route) { HomeScreen() }
+            composable(ScreenItem.Profile.route) { ProfileScreen() }
+            composable(ScreenItem.Message.route) { MessageScreen() }
+            composable(ScreenItem.Game.route) { GameScreen() }
+            composable(ScreenItem.Setting.route) { SettingsScreen() }
         }
     }
 }

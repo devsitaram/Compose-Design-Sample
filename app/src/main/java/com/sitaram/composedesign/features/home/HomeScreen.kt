@@ -29,7 +29,7 @@ import com.sitaram.composedesign.R
 import com.sitaram.composedesign.features.home.pojo.FlowerPojo
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen() {
 
     val flowerList = mutableListOf<FlowerPojo>()
     flowerList.add(FlowerPojo("Aloe Vera", R.string.aloe_vera, R.mipmap.img_aloevera))

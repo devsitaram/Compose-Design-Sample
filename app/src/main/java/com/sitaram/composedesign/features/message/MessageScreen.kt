@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 
 // recycler
 @Composable
-fun MessageScreen(navController: NavHostController) {
+fun MessageScreen() {
 
     val context = LocalContext.current
     var number by remember { mutableStateOf(0) }

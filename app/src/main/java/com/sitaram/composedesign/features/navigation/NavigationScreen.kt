@@ -26,13 +26,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.sitaram.composedesign.R
-import com.sitaram.composedesign.features.login.ViewOfLoginScreen
-import com.sitaram.composedesign.features.main.ScreenItem
-import com.sitaram.composedesign.features.main.User
-import com.sitaram.composedesign.features.register.ViewOfSignUpScreen
 
 @Composable
-fun ProfileScreen(navController: NavHostController) {
+fun ProfileScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
